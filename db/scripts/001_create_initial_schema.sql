@@ -9,5 +9,5 @@ CREATE TABLE auto_post(
   id SERIAL PRIMARY KEY,
   text VARCHAR NOT NULL,
   created TIMESTAMP NOT NULL,
-  auto_user_id references auto_user(id)
+  auto_user_id INT NOT NULL references auto_user(id)
 );
