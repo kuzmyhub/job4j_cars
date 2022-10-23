@@ -8,7 +8,6 @@ import ru.job4j.cars.model.User;
 import javax.persistence.Query;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public class UserRepository {
@@ -46,6 +45,7 @@ public class UserRepository {
                     .setParameter("fId", user.getId())
                     .executeUpdate();
             session.getTransaction().commit();
+            session.close();
         } catch (Exception e) {
             session.getTransaction().rollback();
         }
@@ -63,6 +63,7 @@ public class UserRepository {
                     .setParameter("fId", userId)
                     .executeUpdate();
             session.getTransaction().commit();
+            session.close();
         } catch (Exception e) {
             session.getTransaction().rollback();
         }
@@ -74,11 +75,13 @@ public class UserRepository {
      */
     public List<User> findAllOrderById() {
         Session session = getSession();
-        return session
+        List<User> list = session
                 .createQuery(
                         "FROM User ORDER BY id", User.class
                 )
                 .list();
+        session.close();
+        return list;
     }
 
     /**
@@ -87,11 +90,11 @@ public class UserRepository {
      */
     public Optional<User> findById(int userId) {
         Session session = getSession();
-        Query query = session.createQuery(
+        Optional<User> user = session.createQuery(
                 "FROM User u WHERE u.id = :fId", User.class
-        );
-        query.setParameter("fId", userId);
-        return Optional.of((User) query.getSingleResult());
+        ).setParameter("fId", userId).uniqueResultOptional();
+        session.close();
+        return user;
     }
 
     /**
@@ -105,7 +108,9 @@ public class UserRepository {
                 "FROM User u WHERE u.login LIKE :fLogin", User.class
         );
         query.setParameter("fLogin", "%" + key + "%");
-        return query.getResultList();
+        List<User> list = query.getResultList();
+        session.close();
+        return list;
     }
 
     /**
@@ -115,8 +120,10 @@ public class UserRepository {
      */
     public Optional<User> findByLogin(String login) {
         Session session = getSession();
-        Query query = session.createQuery("FROM User u WHERE u.login = :fLogin");
-        query.setParameter("fLogin", login);
-        return Optional.of((User) query.getSingleResult());
+        Optional<User> user = session.createQuery(
+                "FROM User u WHERE u.login = :fLogin", User.class
+        ).setParameter("fLogin", login).uniqueResultOptional();
+        session.close();
+        return user;
     }
 }
