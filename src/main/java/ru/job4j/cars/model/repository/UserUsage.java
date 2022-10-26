@@ -1,4 +1,4 @@
-package ru.job4j.cars.model.repositoty;
+package ru.job4j.cars.model.repository;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
