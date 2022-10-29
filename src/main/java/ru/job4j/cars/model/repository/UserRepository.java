@@ -1,16 +1,11 @@
 package ru.job4j.cars.model.repository;
 
 import lombok.AllArgsConstructor;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import ru.job4j.cars.model.User;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 @AllArgsConstructor
 public class UserRepository {
