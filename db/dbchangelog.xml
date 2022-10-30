@@ -8,6 +8,7 @@
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
 		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
 		http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
-    <include file="scripts/001_create_initial_schema.sql" relativeToChangelogFile="true"/>
-    <include file="scripts/004_update.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/001_create_auto_user_and_auto_post_tables.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/002_update.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/003_create_price_history_table.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>
