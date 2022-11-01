@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS car (
+id SERIAL PRIMARY KEY,
+name VARCHAR NOT NULL,
+engine_id INT REFERENCES engine(id) unique
+);

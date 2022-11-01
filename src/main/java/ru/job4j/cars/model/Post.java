@@ -17,12 +17,16 @@ public class Post {
     private LocalDateTime created;
 
     @ManyToOne
-    @JoinColumn(name = "auto_user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "auto_post_id")
+    @JoinColumn(name = "post_id")
     private List<PriceHistory> priceHistories;
+
+    @ManyToOne
+    @JoinColumn(name = "car_id")
+    private Car car;
 
     public Post() {
     }
