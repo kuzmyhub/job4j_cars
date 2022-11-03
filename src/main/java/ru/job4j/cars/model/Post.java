@@ -15,6 +15,7 @@ public class Post {
     private int id;
     private String text;
     private LocalDateTime created;
+    private byte[] photo;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
