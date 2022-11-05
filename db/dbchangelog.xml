@@ -19,4 +19,10 @@
     <include file="scripts/009_update_auto_post_table.sql" relativeToChangelogFile="true"/>
     <include file="scripts/010_update_auto_post_table.sql" relativeToChangelogFile="true"/>
     <include file="scripts/011_update_car_table.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/012_update_car_table.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/013_update_auto_post_table.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/014_initialization_engine_table.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/015_update_car_table.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/016_update_auto_post_table.sql" relativeToChangelogFile="true"/>
+
 </databaseChangeLog>

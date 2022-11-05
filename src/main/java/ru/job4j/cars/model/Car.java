@@ -13,9 +13,14 @@ public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String name;
     private String brand;
     private String model;
+    private int release;
+    private String shape;
+    private String drive;
+    private String gsb;
+    private String color;
+    private int mileage;
 
     @ManyToOne
     @JoinColumn(name = "engine_id")
@@ -26,4 +31,7 @@ public class Car {
             joinColumns = { @JoinColumn(name = "driver_id", nullable = false, updatable = false) },
             inverseJoinColumns = { @JoinColumn(name = "car_id", nullable = false, updatable = false)})
     private Set<Driver> owners = new HashSet<>();
+
+    public Car() {
+    }
 }

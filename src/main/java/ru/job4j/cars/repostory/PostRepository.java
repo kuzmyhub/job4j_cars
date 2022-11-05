@@ -8,6 +8,7 @@ import ru.job4j.cars.model.Post;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @ThreadSafe
 @Repository
@@ -16,18 +17,38 @@ public class PostRepository {
 
     private CrudRepository crudRepository;
 
-    private static final String BY_LAST_DAY = "FROM Post p"
-            + " JOIN FETCH p.user JOIN FETCH p.priceHistory JOIN FETCH p.car WHERE p.created > :fCreated";
+    private static final String SELECT = "FROM Post p"
+            + " JOIN FETCH p.user JOIN FETCH p.priceHistory"
+            + " JOIN FETCH p.car";
 
-    private static final String BY_AVAILABILITY_PHOTO = "FROM Post p"
-            + " JOIN FETCH p.user JOIN FETCH p.priceHistory JOIN FETCH p.car WHERE p.photo IS NOT NULL";
+    private static final String BY_ID = "WHERE p.id = :fId";
 
-    private static final String BY_BRAND = "FROM Post p"
-            + " JOIN FETCH p.user JOIN FETCH p.priceHistory JOIN FETCH p.car WHERE p.brand = :fBrand";
+    private static final String BY_LAST_DAY =
+            "WHERE p.created > :fCreated";
+
+    private static final String BY_AVAILABILITY_PHOTO =
+            "WHERE p.photo IS NOT NULL";
+
+    private static final String BY_BRAND =
+            "WHERE p.brand = :fBrand";
+
+    public Optional<Post> findById(int id) {
+        return crudRepository.optional(
+                String.format("%s %s", SELECT, BY_ID),
+                Post.class,
+                Map.of("fId", id)
+        );
+    }
+
+    public List<Post> findAll() {
+        return crudRepository.query(
+                SELECT, Post.class
+        );
+    }
 
     public List<Post> findByLastDay() {
         return crudRepository.query(
-                BY_LAST_DAY,
+                String.format("%s %s", SELECT, BY_LAST_DAY),
                 Post.class,
                 Map.of(":fCreated", LocalDateTime.now().minusDays(1))
         );
@@ -35,14 +56,14 @@ public class PostRepository {
 
     public List<Post> findByAvailabilityPhoto() {
         return crudRepository.query(
-                BY_AVAILABILITY_PHOTO,
+                String.format("%s %s", SELECT, BY_AVAILABILITY_PHOTO),
                 Post.class
                 );
     }
 
     public List<Post> findByBrand(String brand) {
         return crudRepository.query(
-                BY_BRAND,
+                String.format("%s %s", SELECT, BY_BRAND),
                 Post.class,
                 Map.of("fBrand", brand)
         );

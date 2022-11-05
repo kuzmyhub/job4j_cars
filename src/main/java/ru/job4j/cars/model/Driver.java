@@ -16,4 +16,7 @@ public class Driver {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    public Driver() {
+    }
 }

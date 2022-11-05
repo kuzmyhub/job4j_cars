@@ -13,7 +13,8 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String text;
+    private String head;
+    private String description;
     private LocalDateTime created;
     private byte[] photo;
 

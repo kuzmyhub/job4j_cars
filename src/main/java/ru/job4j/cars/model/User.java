@@ -22,4 +22,7 @@ public class User {
             inverseJoinColumns = { @JoinColumn (name = "post_id") }
     )
     private List<Post> participates;
+
+    public User() {
+    }
 }
