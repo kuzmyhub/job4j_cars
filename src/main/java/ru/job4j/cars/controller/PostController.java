@@ -28,7 +28,18 @@ public class PostController {
     public String getPosts(Model model) {
         List<Post> posts = service.findAll();
         model.addAttribute("posts", posts);
-        return "posts";
+        return "post/posts";
+    }
+
+    @GetMapping("/openPost/{id}")
+    public String openPost(Model model,
+                           @PathVariable(name = "id") int id) {
+        Optional<Post> optionalPost = service.findById(id);
+        if (optionalPost.isEmpty()) {
+            return "404";
+        }
+        model.addAttribute("post", optionalPost.get());
+        return "post/post";
     }
 
     @GetMapping("/carPhoto/{postId}")

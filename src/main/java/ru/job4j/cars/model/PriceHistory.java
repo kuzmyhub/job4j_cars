@@ -16,6 +16,6 @@ public class PriceHistory {
     private long after;
     private LocalDateTime created;
 
-    public PriceHistory() {;
+    public PriceHistory() {
     }
 }

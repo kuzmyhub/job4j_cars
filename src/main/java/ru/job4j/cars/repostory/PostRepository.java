@@ -18,7 +18,7 @@ public class PostRepository {
     private CrudRepository crudRepository;
 
     private static final String SELECT = "FROM Post p"
-            + " JOIN FETCH p.user JOIN FETCH p.priceHistory"
+            + " JOIN FETCH p.user JOIN FETCH p.priceHistories"
             + " JOIN FETCH p.car";
 
     private static final String BY_ID = "WHERE p.id = :fId";
@@ -42,7 +42,8 @@ public class PostRepository {
 
     public List<Post> findAll() {
         return crudRepository.query(
-                SELECT, Post.class
+                SELECT,
+                Post.class
         );
     }
 

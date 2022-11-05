@@ -16,6 +16,12 @@
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
     <title>Car shop</title>
+    <style>
+      .indent_div {
+          padding-top: 50px;
+          padding-bottom: 50px;
+      }
+    </style>
 </head>
 <body>
 <div class="container pt-3" style="text-align: center;">
@@ -23,29 +29,10 @@
         <a class="navbar-brand" th:href="@{post/posts}">Car shop</a>
     </nav>
 
-    <div>
-        <table border="1" style="display: inline-block;">
-            <thead>
-                <tr>
-                    <th scope="col">Фото</th>
-                    <th scope="col">Заголовок</th>
-                    <th scope="col">Бренд</th>
-                    <th scope="col">Модель</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="post: ${posts}">
-                    <td>
-                        <img th:width="150" th:high="150" th:src="@{|/carPhoto/${post.id}|}">
-                    </td>
-                    <td>
-                        <a th:href="@{|/openPost/${post.id}|}" th:text="${post.head}"></a>
-                    </td>
-                    <td th:text="${post.car.brand}"></td>
-                    <td th:text="${post.car.model}"></td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="indent_div">
+        <p style="font-size: 28px"><b>404</b></p>
+        <p><b>not found</b></p>
+        <p>страница не найдена</p>
     </div>
 
 </div>
