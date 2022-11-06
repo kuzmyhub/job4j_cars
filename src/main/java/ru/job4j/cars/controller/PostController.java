@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.job4j.cars.model.Post;
 import ru.job4j.cars.servise.PostService;
 
@@ -25,10 +26,28 @@ public class PostController {
     private PostService service;
 
     @GetMapping("/carShop")
-    public String getPosts(Model model) {
-        List<Post> posts = service.findAll();
+    public String getPosts(Model model,
+                           @RequestParam(name = "filter", required = false)
+                           String filter,
+                           @RequestParam(name = "brand", required = false)
+                               String brand) {
+        List<Post> posts = null;
+        if (filter == null) {
+            posts = service.findAll();
+        } else if (filter.equals("day")) {
+            posts = service.findByLastDay();
+        } else if (filter.equals("photo")) {
+            posts = service.findByAvailabilityPhoto();
+        } else if (filter.equals("brand")) {
+            posts = service.findByBrand(brand);
+        }
         model.addAttribute("posts", posts);
         return "post/posts";
+    }
+
+    @GetMapping("/formFindByBrand")
+    public String findByBrand() {
+        return "post/findByBrand";
     }
 
     @GetMapping("/openPost/{id}")

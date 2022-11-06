@@ -17,10 +17,12 @@
 
     <title>Car shop</title>
     <style>
-      .indent_div {
-          padding-top: 50px;
-          padding-bottom: 50px;
-      }
+        .indent_top {
+          padding-top: 20px;
+        }
+        .table_center {
+          margin: auto;
+        }
     </style>
 </head>
 <body>
@@ -29,10 +31,89 @@
         <a class="navbar-brand" th:href="@{post/posts}">Car shop</a>
     </nav>
 
-    <p style="font-size: 18px"><b th:text="${post.head}"></b></p>
+    <div class="indent_top">
+        <table class="table_center" width="770px">
+            <tbody>
+            <tr>
+                <td align="left">
+                    <p style="font-size: 18px"><b th:text="${post.head}"></b></p>
+                </td>
+                <td align="right">
+                    <p style="font-size: 18px"><b th:text="50000 + Р"></b></p>
+                </td>
+            </tr>
+            <tr>
+                <td align="left">
+                    <p><i th:text="${#temporals.format(post.created, 'dd-MM-yyyy HH:mm')}"></i></p>
+                </td>
+                <td>
 
-    <div style="display: inline-block;">Div первый</div>
-    <div style="display: inline-block;">Div второй</div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <table class="table_center" width="800px">
+            <tbody>
+            <tr>
+                <td>
+                    <img th:width="520" th:high="520" th:src="@{|/carPhoto/${post.id}|}">
+                </td>
+                <td width="20px"></td>
+                <td align=left>
+                    <p style="display:inline"><b>Бренд:</b></p>
+                    <p style="display:inline" th:text="${post.car.brand}"></p>
+                    <p></p>
+                    <p style="display:inline"><b>Модель:</b></p>
+                    <p style="display:inline" th:text="${post.car.model}"></p>
+                    <p></p>
+                    <p style="display:inline"><b>Год выпуска:</b></p>
+                    <p style="display:inline" th:text="${post.car.release}"></p>
+                    <p></p>
+                    <p style="display:inline"><b>Кузов:</b></p>
+                    <p style="display:inline" th:text="${post.car.shape}"></p>
+                    <p></p>
+                    <p style="display:inline"><b>Привод:</b></p>
+                    <p style="display:inline" th:text="${post.car.drive}"></p>
+                    <p></p>
+                    <p style="display:inline"><b>Коробка передач:</b></p>
+                    <p style="display:inline" th:text="${post.car.gsb}"></p>
+                    <p></p>
+                    <p style="display:inline"><b>Цвет:</b></p>
+                    <p style="display:inline" th:text="${post.car.color}"></p>
+                    <p></p>
+                    <p style="display:inline"><b>Пробег:</b></p>
+                    <p style="display:inline" th:text="${post.car.mileage}"></p>
+                    <p></p>
+                    <p style="display:inline"><b>Двигатель:</b></p>
+                    <p style="display:inline" th:text="${post.car.engine.name}"></p>
+                </td>
+            </tr>
+            <tr>
+                <td height="20px"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <table class="table_center" width="770px">
+            <tbody>
+            <tr>
+                <td align="left">
+                    <p><b>Описание</b></p>
+                </td>
+            </tr>
+            <tr>
+                <td align="left">
+                    <p th:text="${post.description}"></p>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
 </div>
 </body>

@@ -51,7 +51,7 @@ public class PostRepository {
         return crudRepository.query(
                 String.format("%s %s", SELECT, BY_LAST_DAY),
                 Post.class,
-                Map.of(":fCreated", LocalDateTime.now().minusDays(1))
+                Map.of("fCreated", LocalDateTime.now().minusDays(1))
         );
     }
 

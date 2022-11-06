@@ -16,6 +16,7 @@ public class Post {
     private String head;
     private String description;
     private LocalDateTime created;
+    private boolean sold = false;
     private byte[] photo;
 
     @ManyToOne

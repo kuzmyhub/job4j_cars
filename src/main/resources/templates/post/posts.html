@@ -16,6 +16,19 @@
             integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
     <title>Car shop</title>
+    <style>
+        .table_center {
+          margin: auto;
+        }
+        .indent_top_bot {
+          padding-top: 20px;
+          padding-bottom: 20px;
+        }
+        .indent_a {
+          padding-right: 10px;
+          padding-left: 10px;
+        }
+    </style>
 </head>
 <body>
 <div class="container pt-3" style="text-align: center;">
@@ -23,26 +36,36 @@
         <a class="navbar-brand" th:href="@{post/posts}">Car shop</a>
     </nav>
 
+    <div class="indent_top_bot">
+        <a th:href="@{/carShop}" class="indent_a">Все объявления</a>
+        <a th:href="@{/carShop?filter=day}" class="indent_a">За последние сутки</a>
+        <a th:href="@{/carShop?filter=photo}" class="indent_a">С фото</a>
+        <a th:href="@{/formFindByBrand}" class="indent_a">По бренду</a>
+    </div>
+
     <div>
-        <table border="1" style="display: inline-block;">
+        <table class="table_center" width="600" border="0">
             <thead>
                 <tr>
-                    <th scope="col">Фото</th>
-                    <th scope="col">Заголовок</th>
-                    <th scope="col">Бренд</th>
-                    <th scope="col">Модель</th>
+                    <th scope="col" height="50px" style="border-bottom: 3px solid #808080;">Фото</th>
+                    <th scope="col" height="50px" style="border-bottom: 3px solid #808080;">Заголовок</th>
+                    <th scope="col" height="50px" style="border-bottom: 3px solid #808080;">Бренд</th>
+                    <th scope="col" height="50px" style="border-bottom: 3px solid #808080;">Модель</th>
+                    <th scope="col" height="50px" style="border-bottom: 3px solid #808080;">Статус</th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="post: ${posts}">
-                    <td>
-                        <img th:width="150" th:high="150" th:src="@{|/carPhoto/${post.id}|}">
+                    <td height="165px" style="border-bottom: 3px solid #808080;">
+                        <img th:width="150" th:high="50" th:src="@{|/carPhoto/${post.id}|}">
                     </td>
-                    <td>
+                    <td height="165px" style="border-bottom: 3px solid #808080;">
                         <a th:href="@{|/openPost/${post.id}|}" th:text="${post.head}"></a>
                     </td>
-                    <td th:text="${post.car.brand}"></td>
-                    <td th:text="${post.car.model}"></td>
+                    <td height="165px" th:text="${post.car.brand}" style="border-bottom: 3px solid #808080;"></td>
+                    <td height="165px" th:text="${post.car.model}" style="border-bottom: 3px solid #808080;"></td>
+                    <td height="165px" th:if="${post.sold == false}" style="border-bottom: 3px solid #808080;">Не продано</td>
+                    <td height="165px" th:if="${post.sold == true}" style="border-bottom: 3px solid #808080;">Продано</td>
                 </tr>
             </tbody>
         </table>

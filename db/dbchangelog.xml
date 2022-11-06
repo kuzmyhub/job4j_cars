@@ -24,5 +24,5 @@
     <include file="scripts/014_initialization_engine_table.sql" relativeToChangelogFile="true"/>
     <include file="scripts/015_update_car_table.sql" relativeToChangelogFile="true"/>
     <include file="scripts/016_update_auto_post_table.sql" relativeToChangelogFile="true"/>
-
+    <include file="scripts/017_update_auto_post_table.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>
