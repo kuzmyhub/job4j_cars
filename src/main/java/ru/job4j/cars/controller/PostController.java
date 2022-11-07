@@ -9,14 +9,16 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import ru.job4j.cars.model.Car;
 import ru.job4j.cars.model.Post;
 import ru.job4j.cars.model.PriceHistory;
+import ru.job4j.cars.servise.CarService;
 import ru.job4j.cars.servise.PostService;
 import ru.job4j.cars.servise.PriceHistoryService;
 
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +29,7 @@ import java.util.Optional;
 public class PostController {
 
     private PostService postService;
+    private CarService carService;
 
     @GetMapping("/carShop")
     public String getPosts(Model model,
@@ -68,6 +71,38 @@ public class PostController {
         model.addAttribute("priceHistories", priceHistories);
         model.addAttribute("price", lastChange.getAfter());
         return "post/post";
+    }
+
+    @GetMapping("/formAddCar")
+    public String addCar(Model model) {
+        model.addAttribute("car", new Car());
+        return "post/addCar";
+    }
+
+    @PostMapping("/createCar")
+    public String createPost(Model model, @ModelAttribute Car car) {
+        carService.add(car);
+        model.addAttribute("car", car);
+        System.out.println(car);
+        return "redirect:/formAddPost";
+    }
+
+    @GetMapping("/formAddPost")
+    public String addPost(@ModelAttribute Car car, Model model) {
+        model.addAttribute("car", car);
+        model.addAttribute("post", new Post());
+        return "post/addPost";
+    }
+
+    @PostMapping("/createPost")
+    public String createPost(@RequestParam Car car, @RequestParam Post post,
+                             @RequestParam (name = "file", required = false)
+                                     MultipartFile file, int id) throws IOException {
+        post.setPhoto(file.getBytes());
+        carService.add(car);
+        post.setCar(car);
+        System.out.println(post);
+        return "redirect:/openPost/" + id;
     }
 
     @GetMapping("/carPhoto/{postId}")

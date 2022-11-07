@@ -36,11 +36,15 @@
         <a class="navbar-brand" th:href="@{/carShop}">Car shop</a>
     </nav>
 
+    <form th:action="@{/formAddCar}" style="display: inline">
+        <button type="submit" class="btn btn-primary mt-3">Добавить объявление</button>
+    </form>
+
     <div class="indent_top_bot">
         <a th:href="@{/carShop}" class="indent_a">Все объявления</a>
         <a th:href="@{/carShop?filter=day}" class="indent_a">За последние сутки</a>
         <a th:href="@{/carShop?filter=photo}" class="indent_a">С фото</a>
-        <a th:href="@{/formFindByBrand}" class="indent_a">По бренду</a>
+        <a th:href="@{/formFindByBrand}" class="indent_a">По марке</a>
     </div>
 
     <div>
@@ -49,7 +53,7 @@
                 <tr>
                     <th scope="col" height="50px" style="border-bottom: 3px solid #808080;">Фото</th>
                     <th scope="col" height="50px" style="border-bottom: 3px solid #808080;">Заголовок</th>
-                    <th scope="col" height="50px" style="border-bottom: 3px solid #808080;">Бренд</th>
+                    <th scope="col" height="50px" style="border-bottom: 3px solid #808080;">Марка</th>
                     <th scope="col" height="50px" style="border-bottom: 3px solid #808080;">Модель</th>
                     <th scope="col" height="50px" style="border-bottom: 3px solid #808080;">Статус</th>
                 </tr>

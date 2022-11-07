@@ -20,17 +20,19 @@
 <body>
 <div class="container pt-3" style="text-align: center;">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" th:href="@{post/posts}">Car shop</a>
+        <a class="navbar-brand" th:href="@{/carShop}">Car shop</a>
     </nav>
 
     <div class="container pt-3" style="text-align: center;">
         <div class="card-body">
-            <form th:action="@{/carShop?filter=brand}" method="post">
+            <form th:action="@{/createPost}" th:object="${post}" method="post">
                 <div class="form-group">
-                    <label><b>Название бренда</b></label>
-                    <input type="text" class="form-control" name="brand" id="brand">
+                    <label><b>Описание</b></label>
+                    <input type="text" class="form-control" th:field="*{description}" name="description" id="description">
+                    <label><b>Фото</b></label>
+                    <input type="file" class="form-control" name="photo" id="photo">
                 </div>
-                <button type="submit" class="btn btn-primary mt-3">OK</button>
+                <button type="submit" class="btn btn-primary mt-3">Далее</button>
             </form>
         </div>
     </div>

@@ -15,7 +15,7 @@ public class Post {
     private int id;
     private String head;
     private String description;
-    private LocalDateTime created;
+    private LocalDateTime created = LocalDateTime.now();
     private boolean sold = false;
     private byte[] photo;
 
