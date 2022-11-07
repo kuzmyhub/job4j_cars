@@ -28,7 +28,7 @@
 <body>
 <div class="container pt-3" style="text-align: center;">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" th:href="@{post/posts}">Car shop</a>
+        <a class="navbar-brand" th:href="@{/carShop}">Car shop</a>
     </nav>
 
     <div class="indent_top">
@@ -39,15 +39,18 @@
                     <p style="font-size: 18px"><b th:text="${post.head}"></b></p>
                 </td>
                 <td align="right">
-                    <p style="font-size: 18px"><b th:text="50000 + Р"></b></p>
+                    <p style="font-size: 18px"><b th:text="${price} + Р"></b></p>
                 </td>
             </tr>
             <tr>
                 <td align="left">
                     <p><i th:text="${#temporals.format(post.created, 'dd-MM-yyyy HH:mm')}"></i></p>
                 </td>
-                <td>
-
+                <td align="right">
+                    <select>
+                        <option>История цен</option>
+                        <option th:each="history: ${priceHistories}" th:text="${history.after}"></option>
+                    </select>
                 </td>
             </tr>
             </tbody>

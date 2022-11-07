@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.job4j.cars.model.Post;
+import ru.job4j.cars.model.PriceHistory;
 import ru.job4j.cars.servise.PostService;
+import ru.job4j.cars.servise.PriceHistoryService;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +26,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class PostController {
 
-    private PostService service;
+    private PostService postService;
 
     @GetMapping("/carShop")
     public String getPosts(Model model,
@@ -33,13 +36,13 @@ public class PostController {
                                String brand) {
         List<Post> posts = null;
         if (filter == null) {
-            posts = service.findAll();
+            posts = postService.findAll();
         } else if (filter.equals("day")) {
-            posts = service.findByLastDay();
+            posts = postService.findByLastDay();
         } else if (filter.equals("photo")) {
-            posts = service.findByAvailabilityPhoto();
+            posts = postService.findByAvailabilityPhoto();
         } else if (filter.equals("brand")) {
-            posts = service.findByBrand(brand);
+            posts = postService.findByBrand(brand);
         }
         model.addAttribute("posts", posts);
         return "post/posts";
@@ -53,17 +56,23 @@ public class PostController {
     @GetMapping("/openPost/{id}")
     public String openPost(Model model,
                            @PathVariable(name = "id") int id) {
-        Optional<Post> optionalPost = service.findById(id);
+        Optional<Post> optionalPost = postService.findById(id);
         if (optionalPost.isEmpty()) {
             return "404";
         }
-        model.addAttribute("post", optionalPost.get());
+        Post post = optionalPost.get();
+        List<PriceHistory> priceHistories = post.getPriceHistories();
+        priceHistories.sort(Comparator.comparing(PriceHistory::getCreated));
+        PriceHistory lastChange = priceHistories.get(priceHistories.size() - 1);
+        model.addAttribute("post", post);
+        model.addAttribute("priceHistories", priceHistories);
+        model.addAttribute("price", lastChange.getAfter());
         return "post/post";
     }
 
     @GetMapping("/carPhoto/{postId}")
     public ResponseEntity<Resource> download(@PathVariable("postId") Integer postId) {
-        Optional<Post> optionalPost = service.findById(postId);
+        Optional<Post> optionalPost = postService.findById(postId);
         Post post = optionalPost.get();
         return ResponseEntity.ok()
                 .headers(new HttpHeaders())

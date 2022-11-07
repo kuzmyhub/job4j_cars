@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Repository;
 import ru.job4j.cars.model.Post;
+import ru.job4j.cars.model.PriceHistory;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,8 +18,9 @@ public class PostRepository {
 
     private CrudRepository crudRepository;
 
-    private static final String SELECT = "FROM Post p"
-            + " JOIN FETCH p.user JOIN FETCH p.priceHistories"
+    private static final String SELECT = "SELECT DISTINCT p FROM Post p"
+            + " JOIN FETCH p.user"
+            + " JOIN FETCH p.priceHistories"
             + " JOIN FETCH p.car";
 
     private static final String BY_ID = "WHERE p.id = :fId";
@@ -32,18 +34,18 @@ public class PostRepository {
     private static final String BY_BRAND =
             "WHERE p.brand = :fBrand";
 
+    public List<Post> findAll() {
+        return crudRepository.query(
+                SELECT,
+                Post.class
+        );
+    }
+
     public Optional<Post> findById(int id) {
         return crudRepository.optional(
                 String.format("%s %s", SELECT, BY_ID),
                 Post.class,
                 Map.of("fId", id)
-        );
-    }
-
-    public List<Post> findAll() {
-        return crudRepository.query(
-                SELECT,
-                Post.class
         );
     }
 
