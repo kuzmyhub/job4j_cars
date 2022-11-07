@@ -25,12 +25,28 @@
 
     <div class="container pt-3" style="text-align: center;">
         <div class="card-body">
-            <form th:action="@{/createPost}" th:object="${post}" method="post">
+            <form th:action="@{/createPost}" th:object="${post}" method="post" enctype="multipart/form-data">
                 <div class="form-group">
+                    <label><b>Марка авто</b></label>
+                    <input type="text" class="form-control" th:field="*{car.brand}">
+                    <label><b>Модель авто</b></label>
+                    <input type="text" class="form-control" th:field="*{car.model}">
+                    <label><b>Год выпуска</b></label>
+                    <input type="text" class="form-control" th:field="*{car.release}">
+                    <label><b>Форма кузова</b></label>
+                    <input type="text" class="form-control" th:field="*{car.shape}">
+                    <label><b>Привод</b></label>
+                    <input type="text" class="form-control" th:field="*{car.drive}">
+                    <label><b>Коробка передач</b></label>
+                    <input type="text" class="form-control" th:field="*{car.gsb}">
+                    <label><b>Цвет</b></label>
+                    <input type="text" class="form-control" th:field="*{car.color}">
+                    <label><b>Пробег</b></label>
+                    <input type="text" class="form-control" th:field="*{car.mileage}">
                     <label><b>Описание</b></label>
-                    <input type="text" class="form-control" th:field="*{description}" name="description" id="description">
+                    <input type="text" class="form-control" th:field="*{description}">
                     <label><b>Фото</b></label>
-                    <input type="file" class="form-control" name="photo" id="photo">
+                    <input type="file" class="form-control" name="file" id="file">
                 </div>
                 <button type="submit" class="btn btn-primary mt-3">Далее</button>
             </form>

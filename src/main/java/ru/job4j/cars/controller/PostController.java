@@ -14,9 +14,9 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.job4j.cars.model.Car;
 import ru.job4j.cars.model.Post;
 import ru.job4j.cars.model.PriceHistory;
+import ru.job4j.cars.model.User;
 import ru.job4j.cars.servise.CarService;
 import ru.job4j.cars.servise.PostService;
-import ru.job4j.cars.servise.PriceHistoryService;
 
 import java.io.IOException;
 import java.util.Comparator;
@@ -73,36 +73,27 @@ public class PostController {
         return "post/post";
     }
 
-    @GetMapping("/formAddCar")
-    public String addCar(Model model) {
-        model.addAttribute("car", new Car());
-        return "post/addCar";
-    }
-
-    @PostMapping("/createCar")
-    public String createPost(Model model, @ModelAttribute Car car) {
-        carService.add(car);
-        model.addAttribute("car", car);
-        System.out.println(car);
-        return "redirect:/formAddPost";
-    }
-
     @GetMapping("/formAddPost")
-    public String addPost(@ModelAttribute Car car, Model model) {
-        model.addAttribute("car", car);
-        model.addAttribute("post", new Post());
+    public String addPost(Model model) {
+        Post post = new Post();
+        model.addAttribute("post", post);
         return "post/addPost";
     }
 
     @PostMapping("/createPost")
-    public String createPost(@RequestParam Car car, @RequestParam Post post,
-                             @RequestParam (name = "file", required = false)
-                                     MultipartFile file, int id) throws IOException {
+    public String createPost(@ModelAttribute Post post,
+                             @RequestParam (name = "file")
+                                     MultipartFile file) throws IOException {
+        carService.add(post.getCar());
+        System.out.println(post.getCar());
         post.setPhoto(file.getBytes());
-        carService.add(car);
-        post.setCar(car);
-        System.out.println(post);
-        return "redirect:/openPost/" + id;
+        User user = new User();
+        user.setId(6);
+        user.setLogin("Ivanov");
+        user.setPassword("root");
+        post.setUser(user);
+        postService.add(post);
+        return "redirect:/openPost/" + post.getId();
     }
 
     @GetMapping("/carPhoto/{postId}")

@@ -16,6 +16,10 @@ public class PostService {
 
     private PostRepository store;
 
+    public Post add(Post post) {
+        return store.add(post);
+    }
+
     public Optional<Post> findById(int id) {
         return store.findById(id);
     }

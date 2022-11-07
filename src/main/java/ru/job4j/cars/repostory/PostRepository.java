@@ -34,6 +34,11 @@ public class PostRepository {
     private static final String BY_BRAND =
             "WHERE p.brand = :fBrand";
 
+    public Post add(Post post) {
+        crudRepository.run(session -> session.save(post));
+        return post;
+    }
+
     public List<Post> findAll() {
         return crudRepository.query(
                 SELECT,

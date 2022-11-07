@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import ru.job4j.cars.model.Car;
 import ru.job4j.cars.repostory.CarRepository;
 
+import java.util.Optional;
+
 @ThreadSafe
 @Service
 @AllArgsConstructor
@@ -15,6 +17,10 @@ public class CarService {
 
     public Car add(Car car) {
         return store.add(car);
+    }
+
+    public Optional<Car> findById(int id) {
+        return store.findById(id);
     }
 
 }
