@@ -13,6 +13,9 @@ import java.util.Optional;
 @AllArgsConstructor
 public class CarRepository {
 
+    private static final String SELECT = "SELECT DISTINCT c FROM Car c"
+            + " JOIN FETCH c.owners";
+
     private CrudRepository crudRepository;
 
     public Car add(Car car) {
@@ -21,6 +24,9 @@ public class CarRepository {
     }
 
     public Optional<Car> findById(int id) {
-        return crudRepository.optional("FROM Car c WHERE id = :fId", Car.class, Map.of("fId", id));
+        return crudRepository.optional(SELECT,
+                Car.class,
+                Map.of("fId", id)
+        );
     }
 }

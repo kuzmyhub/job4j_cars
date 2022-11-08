@@ -11,11 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.job4j.cars.model.Car;
-import ru.job4j.cars.model.Post;
-import ru.job4j.cars.model.PriceHistory;
-import ru.job4j.cars.model.User;
+import ru.job4j.cars.model.*;
 import ru.job4j.cars.servise.CarService;
+import ru.job4j.cars.servise.EngineService;
 import ru.job4j.cars.servise.PostService;
 
 import java.io.IOException;
@@ -30,6 +28,7 @@ public class PostController {
 
     private PostService postService;
     private CarService carService;
+    private EngineService engineService;
 
     @GetMapping("/carShop")
     public String getPosts(Model model,
@@ -77,21 +76,22 @@ public class PostController {
     public String addPost(Model model) {
         Post post = new Post();
         model.addAttribute("post", post);
+        model.addAttribute("engines", engineService.findAll());
         return "post/addPost";
     }
 
     @PostMapping("/createPost")
     public String createPost(@ModelAttribute Post post,
+                             @ModelAttribute(name = "engineId") int engineId,
                              @RequestParam (name = "file")
                                      MultipartFile file) throws IOException {
-        carService.add(post.getCar());
-        System.out.println(post.getCar());
+        Optional<Engine> engine = engineService.findById(engineId);
+        if (engine.isEmpty()) {
+            return "redirect:/formAddPost";
+        }
+        post.getCar().setEngine(engine.get());
         post.setPhoto(file.getBytes());
-        User user = new User();
-        user.setId(6);
-        user.setLogin("Ivanov");
-        user.setPassword("root");
-        post.setUser(user);
+        carService.add(post.getCar());
         postService.add(post);
         return "redirect:/openPost/" + post.getId();
     }

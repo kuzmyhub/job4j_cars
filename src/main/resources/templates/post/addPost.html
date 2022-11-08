@@ -21,6 +21,7 @@
 <div class="container pt-3" style="text-align: center;">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" th:href="@{/carShop}">Car shop</a>
+        <a class="navbar-brand" th:href="@{/formRegistration}">Регистрация</a>
     </nav>
 
     <div class="container pt-3" style="text-align: center;">
@@ -31,6 +32,10 @@
                     <input type="text" class="form-control" th:field="*{car.brand}">
                     <label><b>Модель авто</b></label>
                     <input type="text" class="form-control" th:field="*{car.model}">
+                    <label><b>Двигатель</b></label>
+                    <select name="engineId" id="engineId" class="form-control">
+                        <option th:each="engine: ${engines}" th:text="${engine.name}" th:value="${engine.id}"></option>
+                    </select>
                     <label><b>Год выпуска</b></label>
                     <input type="text" class="form-control" th:field="*{car.release}">
                     <label><b>Форма кузова</b></label>
