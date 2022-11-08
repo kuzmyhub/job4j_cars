@@ -40,4 +40,7 @@ public class PostService {
         return store.findByBrand(brand);
     }
 
+    public Post update(Post post) {
+        return store.update(post);
+    }
 }

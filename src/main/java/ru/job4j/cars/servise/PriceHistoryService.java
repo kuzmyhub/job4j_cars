@@ -16,4 +16,7 @@ public class PriceHistoryService {
 
     private PriceHistoryRepository store;
 
+    public PriceHistory add(PriceHistory priceHistory) {
+        return store.add(priceHistory);
+    }
 }

@@ -15,4 +15,8 @@ public class PriceHistoryRepository {
 
     private CrudRepository crudRepository;
 
+    public PriceHistory add(PriceHistory priceHistory) {
+        crudRepository.run(session -> session.save(priceHistory));
+        return priceHistory;
+    }
 }

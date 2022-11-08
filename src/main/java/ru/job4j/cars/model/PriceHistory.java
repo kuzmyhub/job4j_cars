@@ -14,7 +14,7 @@ public class PriceHistory {
     private int id;
     private long before;
     private long after;
-    private LocalDateTime created;
+    private LocalDateTime created = LocalDateTime.now();
 
     public PriceHistory() {
     }

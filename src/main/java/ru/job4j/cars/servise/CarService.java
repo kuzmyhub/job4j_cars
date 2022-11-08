@@ -23,4 +23,7 @@ public class CarService {
         return store.findById(id);
     }
 
+    public Car update(Car car) {
+        return store.update(car);
+    }
 }

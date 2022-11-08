@@ -76,4 +76,9 @@ public class PostRepository {
                 Map.of("fBrand", brand)
         );
     }
+
+    public Post update(Post post) {
+        crudRepository.run(session -> session.update(post));
+        return post;
+    }
 }

@@ -20,7 +20,7 @@
 <body>
 <div class="container pt-3" style="text-align: center;">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" th:href="@{post/posts}">Car shop</a>
+        <a class="navbar-brand" th:href="@{carShop}">Car shop</a>
         <a class="navbar-brand" th:href="@{/formRegistration}">Регистрация</a>
         <a class="navbar-brand" th:if="${user.login == 'Гость'}" th:href="@{/formLogin}">
             <span th:text="${user.login}"></span>

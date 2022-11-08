@@ -29,4 +29,9 @@ public class CarRepository {
                 Map.of("fId", id)
         );
     }
+
+    public Car update(Car car) {
+        crudRepository.run(session -> session.update(car));
+        return car;
+    }
 }
