@@ -19,6 +19,8 @@ public class UserRepository {
 
     public static final String BY_ID = "WHERE u.id = :fId";
 
+    public static final String BY_LOGIN_AND_PASSWORD = "WHERE u.login = :fLogin AND u.password = :fPassword";
+
     public User add(User user) {
         crudRepository.run(session -> session.save(user));
         return user;
@@ -29,6 +31,14 @@ public class UserRepository {
                 String.format("%s %s", SELECT, BY_ID),
                 User.class,
                 Map.of("fId", id)
+        );
+    }
+
+    public Optional<User> findByLoginAndPassword(User user) {
+        return crudRepository.optional(
+                String.format("%s %s", SELECT, BY_LOGIN_AND_PASSWORD),
+                User.class,
+                Map.of("fLogin", user.getLogin(), "fPassword", user.getPassword())
         );
     }
 }

@@ -34,34 +34,14 @@
 
     <div class="container pt-3" style="text-align: center;">
         <div class="card-body">
-            <form th:action="@{/createPost}" th:object="${post}" method="post" enctype="multipart/form-data">
+            <form th:action="@{/login}" th:object="${loginUser}" method="post">
                 <div class="form-group">
-                    <label><b>Марка авто</b></label>
-                    <input type="text" class="form-control" th:field="*{car.brand}">
-                    <label><b>Модель авто</b></label>
-                    <input type="text" class="form-control" th:field="*{car.model}">
-                    <label><b>Двигатель</b></label>
-                    <select name="engineId" id="engineId" class="form-control">
-                        <option th:each="engine: ${engines}" th:text="${engine.name}" th:value="${engine.id}"></option>
-                    </select>
-                    <label><b>Год выпуска</b></label>
-                    <input type="text" class="form-control" th:field="*{car.release}">
-                    <label><b>Форма кузова</b></label>
-                    <input type="text" class="form-control" th:field="*{car.shape}">
-                    <label><b>Привод</b></label>
-                    <input type="text" class="form-control" th:field="*{car.drive}">
-                    <label><b>Коробка передач</b></label>
-                    <input type="text" class="form-control" th:field="*{car.gsb}">
-                    <label><b>Цвет</b></label>
-                    <input type="text" class="form-control" th:field="*{car.color}">
-                    <label><b>Пробег</b></label>
-                    <input type="text" class="form-control" th:field="*{car.mileage}">
-                    <label><b>Описание</b></label>
-                    <input type="text" class="form-control" th:field="*{description}">
-                    <label><b>Фото</b></label>
-                    <input type="file" class="form-control" name="file" id="file">
+                    <label><b>Логин</b></label>
+                    <input type="text" class="form-control" th:field="*{login}">
+                    <label><b>Пароль</b></label>
+                    <input type="text" class="form-control" th:field="*{password}">
                 </div>
-                <button type="submit" class="btn btn-primary mt-3">Далее</button>
+                <button type="submit" class="btn btn-primary mt-3">Войти</button>
             </form>
         </div>
     </div>

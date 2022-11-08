@@ -35,9 +35,20 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" th:href="@{/carShop}">Car shop</a>
         <a class="navbar-brand" th:href="@{/formRegistration}">Регистрация</a>
+        <a class="navbar-brand" th:if="${user.login == 'Гость'}" th:href="@{/formLogin}">
+            <span th:text="${user.login}"></span>
+            <span> | Войти</span>
+        </a>
+        <a class="navbar-brand" th:if="${user.login != 'Гость'}" th:href="@{/logout}">
+            <span th:text="${user.login}"></span>
+            <span> | Выйти</span>
+        </a>
     </nav>
 
-    <form th:action="@{/formAddPost}" style="display: inline">
+    <form th:if="${user.login != 'Гость'}" th:action="@{/formAddPost}" style="display: inline">
+        <button type="submit" class="btn btn-primary mt-3">Добавить объявление</button>
+    </form>
+    <form th:if="${user.login == 'Гость'}" th:action="@{/formLogin}" style="display: inline">
         <button type="submit" class="btn btn-primary mt-3">Добавить объявление</button>
     </form>
 

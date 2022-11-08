@@ -15,7 +15,9 @@ import ru.job4j.cars.model.*;
 import ru.job4j.cars.servise.CarService;
 import ru.job4j.cars.servise.EngineService;
 import ru.job4j.cars.servise.PostService;
+import ru.job4j.cars.util.SessionUser;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
@@ -35,7 +37,7 @@ public class PostController {
                            @RequestParam(name = "filter", required = false)
                            String filter,
                            @RequestParam(name = "brand", required = false)
-                               String brand) {
+                               String brand, HttpSession httpSession) {
         List<Post> posts = null;
         if (filter == null) {
             posts = postService.findAll();
@@ -46,17 +48,21 @@ public class PostController {
         } else if (filter.equals("brand")) {
             posts = postService.findByBrand(brand);
         }
+        User user = SessionUser.getSession(httpSession);
+        model.addAttribute("user", user);
         model.addAttribute("posts", posts);
         return "post/posts";
     }
 
     @GetMapping("/formFindByBrand")
-    public String findByBrand() {
+    public String findByBrand(Model model, HttpSession httpSession) {
+        User user = SessionUser.getSession(httpSession);
+        model.addAttribute("user", user);
         return "post/findByBrand";
     }
 
     @GetMapping("/openPost/{id}")
-    public String openPost(Model model,
+    public String openPost(Model model, HttpSession httpSession,
                            @PathVariable(name = "id") int id) {
         Optional<Post> optionalPost = postService.findById(id);
         if (optionalPost.isEmpty()) {
@@ -66,22 +72,26 @@ public class PostController {
         List<PriceHistory> priceHistories = post.getPriceHistories();
         priceHistories.sort(Comparator.comparing(PriceHistory::getCreated));
         PriceHistory lastChange = priceHistories.get(priceHistories.size() - 1);
+        User user = SessionUser.getSession(httpSession);
         model.addAttribute("post", post);
         model.addAttribute("priceHistories", priceHistories);
         model.addAttribute("price", lastChange.getAfter());
+        model.addAttribute("user", user);
         return "post/post";
     }
 
     @GetMapping("/formAddPost")
-    public String addPost(Model model) {
+    public String addPost(Model model, HttpSession httpSession) {
         Post post = new Post();
+        User user = SessionUser.getSession(httpSession);
         model.addAttribute("post", post);
         model.addAttribute("engines", engineService.findAll());
+        model.addAttribute("user", user);
         return "post/addPost";
     }
 
     @PostMapping("/createPost")
-    public String createPost(@ModelAttribute Post post,
+    public String createPost(@ModelAttribute Post post, HttpSession httpSession,
                              @ModelAttribute(name = "engineId") int engineId,
                              @RequestParam (name = "file")
                                      MultipartFile file) throws IOException {
