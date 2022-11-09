@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Service;
 import ru.job4j.cars.model.Post;
+import ru.job4j.cars.model.PriceHistory;
 import ru.job4j.cars.repostory.PostRepository;
 
 import java.util.List;
@@ -40,7 +41,15 @@ public class PostService {
         return store.findByBrand(brand);
     }
 
-    public Post update(Post post) {
-        return store.update(post);
+    public void updateDescription(int id, String description) {
+        store.updateDescription(id, description);
+    }
+
+    public void changeStatus(int id, boolean sold) {
+        store.changeStatus(id, sold);
+    }
+
+    public void update(Post post) {
+        store.update(post);
     }
 }

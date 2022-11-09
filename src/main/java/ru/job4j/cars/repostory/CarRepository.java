@@ -16,6 +16,8 @@ public class CarRepository {
     private static final String SELECT = "SELECT DISTINCT c FROM Car c"
             + " JOIN FETCH c.owners";
 
+    private static final String BY_ID = "WHERE c.id = :fId";
+
     private CrudRepository crudRepository;
 
     public Car add(Car car) {
@@ -24,7 +26,8 @@ public class CarRepository {
     }
 
     public Optional<Car> findById(int id) {
-        return crudRepository.optional(SELECT,
+        return crudRepository.optional(
+                String.format("%s %s", SELECT, BY_ID),
                 Car.class,
                 Map.of("fId", id)
         );

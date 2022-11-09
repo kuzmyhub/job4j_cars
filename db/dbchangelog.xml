@@ -25,4 +25,5 @@
     <include file="scripts/015_update_car_table.sql" relativeToChangelogFile="true"/>
     <include file="scripts/016_update_auto_post_table.sql" relativeToChangelogFile="true"/>
     <include file="scripts/017_update_auto_post_table.sql" relativeToChangelogFile="true"/>
+    <include file="scripts/018_update_table_history_owners.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>

@@ -77,6 +77,15 @@ public class PostController {
         model.addAttribute("post", post);
         model.addAttribute("priceHistories", priceHistories);
         model.addAttribute("price", lastChange.getAfter());
+        Optional<Car> optionalCar = carService.findById(post.getCar().getId());
+        if (optionalCar.isEmpty()) {
+            return "404";
+        }
+        Set<Driver> owners = optionalCar.get().getOwners();
+        for (Driver d : owners) {
+            System.out.println(d.getName());
+        }
+        model.addAttribute("owners", owners);
         model.addAttribute("user", user);
         return "post/post";
     }
@@ -95,6 +104,7 @@ public class PostController {
     public String createPost(@ModelAttribute Post post, HttpSession httpSession,
                              @ModelAttribute(name = "engineId") int engineId,
                              @ModelAttribute(name = "price") int price,
+                             @ModelAttribute(name = "driverName") String driverName,
                              @RequestParam (name = "file")
                                      MultipartFile file) throws IOException {
         User user = SessionUser.getSession(httpSession);
@@ -103,10 +113,16 @@ public class PostController {
             return "redirect:/formAddPost";
         }
         post.getCar().setEngine(engine.get());
-        Driver driver = new Driver();
-        driver.setName(user.getLogin());
-        driver.setUser(user);
-        driverService.add(driver);
+        Optional<Driver> optionalDriver = driverService.findByUser(user);
+        Driver driver;
+        if (optionalDriver.isEmpty()) {
+            driver = new Driver();
+            driver.setName(driverName);
+            driver.setUser(user);
+            driverService.add(driver);
+        } else {
+            driver = optionalDriver.get();
+        }
         post.getCar().setOwners(Set.of(driver));
         PriceHistory priceHistory = new PriceHistory();
         priceHistory.setBefore(0);
@@ -121,7 +137,7 @@ public class PostController {
         return "redirect:/openPost/" + post.getId();
     }
 
-    @GetMapping("/formEdit")
+    @GetMapping("/formEditDescription")
     public String formEdit(Model model, HttpSession httpSession,
                            @ModelAttribute(name = "postId") int postId) {
         Optional<Post> optionalPost = postService.findById(postId);
@@ -130,45 +146,60 @@ public class PostController {
         }
         User user = SessionUser.getSession(httpSession);
         model.addAttribute("post", optionalPost.get());
-        model.addAttribute("engines", engineService.findAll());
         model.addAttribute("user", user);
-        return "post/edit";
+        return "post/editDescription";
     }
 
-    @PostMapping("/edit")
-    public String edit(@ModelAttribute Post post,
-                       @ModelAttribute(name = "engineId") int engineId,
-                       @ModelAttribute(name = "price") int price,
-                       @ModelAttribute(name = "postId") int postId,
-                       @RequestParam (name = "file")
-                           MultipartFile file) throws IOException {
-        Optional<Engine> engine = engineService.findById(engineId);
-        if (engine.isEmpty()) {
-            return "redirect:/formAddPost";
+    @PostMapping("/editDescription")
+    public String edit(@ModelAttribute(name = "postId") int postId,
+                       @ModelAttribute(name = "description") String description) {
+        postService.updateDescription(postId, description);
+        return "redirect:/openPost/" + postId;
+    }
+
+    @GetMapping("/changeStatus")
+    public String changeStatus(@ModelAttribute(name = "postId") int postId) {
+        Optional<Post> optionalPost = postService.findById(postId);
+        if (optionalPost.isEmpty()) {
+            return "redirect:/404";
         }
-        System.out.println("popo" + postId);
+        postService.changeStatus(postId, !optionalPost.get().isSold());
+        return "redirect:/openPost/" + postId;
+    }
+
+    @GetMapping("/formEditPriceHistory")
+    public String formEditPrice(Model model, HttpSession httpSession,
+                                @ModelAttribute(name = "postId") int postId) {
         Optional<Post> optionalPost = postService.findById(postId);
         if (optionalPost.isEmpty()) {
             return "404";
         }
-        Post postDB = optionalPost.get();
-        post.getCar().setEngine(engine.get());
-        post.getCar().setId(postDB.getCar().getId());
-        post.getCar().setOwners(postDB.getCar().getOwners());
-        PriceHistory priceHistory = new PriceHistory();
-        List<PriceHistory> priceHistories = postDB.getPriceHistories();
+        User user = SessionUser.getSession(httpSession);
+        model.addAttribute("post", optionalPost.get());
+        List<PriceHistory> priceHistories = optionalPost.get().getPriceHistories();
         priceHistories.sort(Comparator.comparing(PriceHistory::getCreated));
-        PriceHistory lastChange = priceHistories.get(priceHistories.size() - 1);
-        priceHistory.setBefore(lastChange.getAfter());
+        model.addAttribute("price", priceHistories.get(priceHistories.size() - 1).getAfter());
+        model.addAttribute("user", user);
+        return "post/editPriceHistory";
+    }
+
+    @PostMapping("/editPriceHistory")
+    public String edit(@ModelAttribute(name = "postId") int postId,
+                       @ModelAttribute(name = "price") int price) {
+        Optional<Post> optionalPost = postService.findById(postId);
+        if (optionalPost.isEmpty()) {
+            return "404";
+        }
+        List<PriceHistory> priceHistories = optionalPost.get().getPriceHistories();
+        priceHistories.sort(Comparator.comparing(PriceHistory::getCreated));
+        PriceHistory priceHistory = new PriceHistory();
+        priceHistory.setBefore(priceHistories.get(priceHistories.size() - 1).getAfter());
         priceHistory.setAfter(price);
-        priceHistoryService.add(priceHistory);
-        postDB.setPhoto(file.getBytes());
-        postDB.getPriceHistories().add(priceHistory);
-        postDB.setHead(post.getCar().getBrand() + " " + post.getCar().getModel());
-        carService.update(post.getCar());
-        postDB.setCar(post.getCar());
+        priceHistories.add(priceHistory);
+        Post post = optionalPost.get();
+        post.setPriceHistories(priceHistories);
         postService.update(post);
-        return "redirect:/openPost/" + postDB.getId();
+        return "redirect:/openPost/" + postId;
     }
 
     @GetMapping("/carPhoto/{postId}")

@@ -48,7 +48,7 @@
                     <p style="font-size: 18px"><b th:text="${post.head}"></b></p>
                 </td>
                 <td align="right">
-                    <p style="font-size: 18px"><b th:text="${price} + Р"></b></p>
+                    <p style="font-size: 18px; display:inline;"><b th:text="${price} + Р"></b></p>
                 </td>
             </tr>
             <tr>
@@ -62,11 +62,24 @@
                     </select>
                 </td>
             </tr>
+            <tr>
+                <td align="left">
+                    <select>
+                        <option>Владельцы</option>
+                        <option th:each="owner: ${owners}" th:text="${owner.name}"></option>
+                    </select>
+                </td>
+                <td align="right">
+                    <form th:if="${post.user.id == user.id}" th:action="@{/formEditPriceHistory}" style="display:inline;">
+                        <button type="submit" name="postId" th:value="${post.id}" class="btn btn-primary mt-3">Изменить цену</button>
+                    </form>
+                <td/>
+            </tr>
             </tbody>
         </table>
     </div>
 
-    <div>
+    <div style="padding-top: 20px">
         <table class="table_center" width="800px">
             <tbody>
             <tr>
@@ -118,14 +131,28 @@
                     <p><b>Описание</b></p>
                 </td>
                 <td align="left">
-                    <form th:action="@{/formEdit}">
-                        <button type="submit" name="postId" th:value="${post.id}" class="btn btn-primary mt-3">Редактировать</button>
-                    </form>
+                    <p><b>Статус</b></p>
                 </td>
             </tr>
             <tr>
                 <td align="left">
                     <p th:text="${post.description}"></p>
+                </td>
+                <td align="left">
+                    <p th:if="${post.sold == false}">Не продано</p>
+                    <p th:if="${post.sold != false}">Продано</p>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" th:if="${post.user.id == user.id}">
+                    <form th:action="@{/formEditDescription}">
+                        <button type="submit" name="postId" th:value="${post.id}" class="btn btn-primary mt-3">Редактировать</button>
+                    </form>
+                </td>
+                <td align="left" th:if="${post.user.id == user.id}">
+                    <form th:action="@{/changeStatus}">
+                        <button type="submit" name="postId" th:value="${post.id}" class="btn btn-primary mt-3">Сменить статус</button>
+                    </form>
                 </td>
             </tr>
             </tbody>

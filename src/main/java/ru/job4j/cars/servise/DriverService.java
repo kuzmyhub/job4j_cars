@@ -4,7 +4,10 @@ import lombok.AllArgsConstructor;
 import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Service;
 import ru.job4j.cars.model.Driver;
+import ru.job4j.cars.model.User;
 import ru.job4j.cars.repostory.DriverRepository;
+
+import java.util.Optional;
 
 @ThreadSafe
 @Service
@@ -15,5 +18,9 @@ public class DriverService {
 
     public Driver add(Driver driver) {
         return store.add(driver);
+    }
+
+    public Optional<Driver> findByUser(User user) {
+        return store.findByUser(user);
     }
 }

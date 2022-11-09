@@ -3,6 +3,7 @@ package ru.job4j.cars.repostory;
 import lombok.AllArgsConstructor;
 import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import ru.job4j.cars.model.Post;
 import ru.job4j.cars.model.PriceHistory;
 
@@ -19,7 +20,7 @@ public class PostRepository {
     private CrudRepository crudRepository;
 
     private static final String SELECT = "SELECT DISTINCT p FROM Post p"
-            + " JOIN FETCH p.user"
+            + " JOIN FETCH p.user u"
             + " JOIN FETCH p.priceHistories"
             + " JOIN FETCH p.car";
 
@@ -33,6 +34,15 @@ public class PostRepository {
 
     private static final String BY_BRAND =
             "WHERE p.brand = :fBrand";
+
+    private static final String UPDATE = "UPDATE Post p SET";
+
+    private static final String DESCRIPTION =
+            "p.description = :fDescription WHERE p.id = :fId";
+
+    private static final String SOLD = "p.sold = :fSold WHERE p.id = :fId";
+
+    private static final String PRICE = "p.priceHistories = :fPriceHistories WHERE p.id = :fId";
 
     public Post add(Post post) {
         crudRepository.run(session -> session.save(post));
@@ -77,8 +87,21 @@ public class PostRepository {
         );
     }
 
-    public Post update(Post post) {
+    public void updateDescription(int id, String description) {
+        crudRepository.run(
+                String.format("%s %s", UPDATE, DESCRIPTION),
+                Map.of("fDescription", description, "fId", id
+                ));
+    }
+
+    public void changeStatus(int id, boolean sold) {
+        crudRepository.run(
+                String.format("%s %s", UPDATE, SOLD),
+                Map.of("fSold", sold, "fId", id
+                ));
+    }
+
+    public void update(Post post) {
         crudRepository.run(session -> session.update(post));
-        return post;
     }
 }
