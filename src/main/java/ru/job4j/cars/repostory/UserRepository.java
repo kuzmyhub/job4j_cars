@@ -3,8 +3,10 @@ package ru.job4j.cars.repostory;
 import lombok.AllArgsConstructor;
 import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Repository;
+import ru.job4j.cars.model.Post;
 import ru.job4j.cars.model.User;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -40,5 +42,16 @@ public class UserRepository {
                 User.class,
                 Map.of("fLogin", user.getLogin(), "fPassword", user.getPassword())
         );
+    }
+
+    public void update(User user) {
+        crudRepository.run(session -> session.update(user));
+    }
+
+    public Optional<User> findParticipatesByUser(int id) {
+        return crudRepository.optional(
+                "FROM User u JOIN FETCH u.participates WHERE u.id = :fId",
+                User.class,
+                Map.of("fId", id));
     }
 }

@@ -20,7 +20,7 @@ public class PostRepository {
     private CrudRepository crudRepository;
 
     private static final String SELECT = "SELECT DISTINCT p FROM Post p"
-            + " JOIN FETCH p.user u"
+            + " JOIN FETCH p.user"
             + " JOIN FETCH p.priceHistories"
             + " JOIN FETCH p.car";
 
@@ -41,8 +41,6 @@ public class PostRepository {
             "p.description = :fDescription WHERE p.id = :fId";
 
     private static final String SOLD = "p.sold = :fSold WHERE p.id = :fId";
-
-    private static final String PRICE = "p.priceHistories = :fPriceHistories WHERE p.id = :fId";
 
     public Post add(Post post) {
         crudRepository.run(session -> session.save(post));

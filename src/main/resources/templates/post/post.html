@@ -127,11 +127,19 @@
         <table class="table_center" width="770px">
             <tbody>
             <tr>
-                <td align="left">
+                <td align="left" width="425px">
                     <p><b>Описание</b></p>
                 </td>
-                <td align="left">
+                <td align="left" width="130px">
                     <p><b>Статус</b></p>
+                </td>
+                <td align="left">
+                    <form th:if="${user.login == 'Гость'}" th:action="@{/formLogin}">
+                        <button type="submit" class="btn btn-primary mt-3">Подписаться</button>
+                    </form>
+                    <form th:if="${user.login != 'Гость'}" th:action="@{/subscribe}">
+                        <button type="submit" name="postId" th:value="${post.id}" class="btn btn-primary mt-3">Подписаться</button>
+                    </form>
                 </td>
             </tr>
             <tr>

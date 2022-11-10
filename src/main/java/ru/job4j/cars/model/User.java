@@ -15,9 +15,8 @@ public class User {
     private String login;
     private String password;
 
-    @ManyToMany
-    @JoinTable(
-            name = "participates",
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "participates",
             joinColumns = { @JoinColumn (name = "user_id") },
             inverseJoinColumns = { @JoinColumn (name = "post_id") }
     )

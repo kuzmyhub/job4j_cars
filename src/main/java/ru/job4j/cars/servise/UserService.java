@@ -26,4 +26,12 @@ public class UserService {
     public Optional<User> findByLoginAndPassword(User user) {
         return store.findByLoginAndPassword(user);
     }
+
+    public void update(User user) {
+        store.update(user);
+    }
+
+    public Optional<User> findParticipatesByUser(int id) {
+        return store.findParticipatesByUser(id);
+    }
 }

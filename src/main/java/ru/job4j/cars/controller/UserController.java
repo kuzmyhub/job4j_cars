@@ -6,13 +6,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import ru.job4j.cars.model.Post;
 import ru.job4j.cars.model.User;
+import ru.job4j.cars.servise.PostService;
 import ru.job4j.cars.servise.UserService;
 import ru.job4j.cars.util.SessionUser;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @ThreadSafe
@@ -21,6 +26,7 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+    private final PostService postService;
 
     @GetMapping("/formRegistration")
     public String formRegistrationUser(Model model, HttpSession httpSession) {
@@ -59,5 +65,34 @@ public class UserController {
     public String logout(HttpSession httpSession) {
         httpSession.invalidate();
         return "redirect:/carShop";
+    }
+
+    @GetMapping("/subscribe")
+    public String subscribe(@ModelAttribute(name = "postId") int postId,
+                            HttpSession httpSession) {
+        User user = SessionUser.getSession(httpSession);
+        Optional<Post> optionalPost = postService.findById(postId);
+        if (optionalPost.isEmpty()) {
+            return "404";
+        }
+        Post post = optionalPost.get();
+        Optional<User> optionalUserWithParticipates
+                = userService.findParticipatesByUser(user.getId());
+        if (optionalUserWithParticipates.isEmpty()) {
+            user.setParticipates(new ArrayList<>());
+            optionalUserWithParticipates = Optional.of(user);
+        }
+        User userWithParticipates = optionalUserWithParticipates.get();
+        List<Post> participates;
+        if (userWithParticipates.getParticipates() == null) {
+            participates = new ArrayList<>();
+            userWithParticipates.setParticipates(participates);
+        } else {
+            participates = userWithParticipates.getParticipates();
+        }
+        participates.add(post);
+        user.setParticipates(participates);
+        userService.update(user);
+        return "redirect:/openPost/" + postId;
     }
 }
