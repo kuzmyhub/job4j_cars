@@ -13,7 +13,7 @@ import java.util.function.Function;
 
 @Component
 @AllArgsConstructor
-public class CrudRepository {
+public class CrudRepository implements Crud {
 
     private final SessionFactory sf;
 

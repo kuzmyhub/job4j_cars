@@ -1,55 +1,27 @@
 package ru.job4j.cars.servise;
 
-import lombok.AllArgsConstructor;
-import net.jcip.annotations.ThreadSafe;
-import org.springframework.stereotype.Service;
 import ru.job4j.cars.model.Post;
-import ru.job4j.cars.model.PriceHistory;
-import ru.job4j.cars.repostory.PostRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-@ThreadSafe
-@Service
-@AllArgsConstructor
-public class PostService {
+public interface PostService {
 
-    private PostRepository store;
+     Post add(Post post);
 
-    public Post add(Post post) {
-        return store.add(post);
-    }
+     Optional<Post> findById(int id);
 
-    public Optional<Post> findById(int id) {
-        return store.findById(id);
-    }
+     List<Post> findAll();
 
-    public List<Post> findAll() {
-        return store.findAll();
-    }
+     List<Post> findByLastDay();
 
-    public List<Post> findByLastDay() {
-        return store.findByLastDay();
-    }
+     List<Post> findByAvailabilityPhoto();
 
-    public List<Post> findByAvailabilityPhoto() {
-        return store.findByAvailabilityPhoto();
-    }
+     List<Post> findByBrand(String brand);
 
-    public List<Post> findByBrand(String brand) {
-        return store.findByBrand(brand);
-    }
+     void updateDescription(int id, String description);
 
-    public void updateDescription(int id, String description) {
-        store.updateDescription(id, description);
-    }
+     void changeStatus(int id, boolean sold);
 
-    public void changeStatus(int id, boolean sold) {
-        store.changeStatus(id, sold);
-    }
-
-    public void update(Post post) {
-        store.update(post);
-    }
+     void update(Post post);
 }

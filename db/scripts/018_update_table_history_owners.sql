@@ -1,1 +1,1 @@
-alter table history_owner rename to history_owners;
+ALTER TABLE history_owner RENAME TO history_owners;

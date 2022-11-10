@@ -6,12 +6,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.job4j.cars.model.Post;
 import ru.job4j.cars.model.User;
-import ru.job4j.cars.servise.PostService;
-import ru.job4j.cars.servise.UserService;
+import ru.job4j.cars.servise.HibernatePostService;
+import ru.job4j.cars.servise.HibernateUserService;
 import ru.job4j.cars.util.SessionUser;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,8 +24,8 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserController {
 
-    private final UserService userService;
-    private final PostService postService;
+    private final HibernateUserService hibernateUserService;
+    private final HibernatePostService hibernatePostService;
 
     @GetMapping("/formRegistration")
     public String formRegistrationUser(Model model, HttpSession httpSession) {
@@ -38,7 +37,7 @@ public class UserController {
 
     @PostMapping("/registration")
     public String registration(@ModelAttribute User registrationUser) {
-        userService.add(registrationUser);
+        hibernateUserService.add(registrationUser);
         return "redirect:/carShop";
     }
 
@@ -52,7 +51,7 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(@ModelAttribute User user, HttpServletRequest httpServletRequest) {
-        Optional<User> optionalUser = userService.findByLoginAndPassword(user);
+        Optional<User> optionalUser = hibernateUserService.findByLoginAndPassword(user);
         if (optionalUser.isEmpty()) {
             return "redirect:/formLogin";
         }
@@ -71,13 +70,13 @@ public class UserController {
     public String subscribe(@ModelAttribute(name = "postId") int postId,
                             HttpSession httpSession) {
         User user = SessionUser.getSession(httpSession);
-        Optional<Post> optionalPost = postService.findById(postId);
+        Optional<Post> optionalPost = hibernatePostService.findById(postId);
         if (optionalPost.isEmpty()) {
             return "404";
         }
         Post post = optionalPost.get();
         Optional<User> optionalUserWithParticipates
-                = userService.findParticipatesByUser(user.getId());
+                = hibernateUserService.findParticipatesByUser(user.getId());
         if (optionalUserWithParticipates.isEmpty()) {
             user.setParticipates(new ArrayList<>());
             optionalUserWithParticipates = Optional.of(user);
@@ -92,7 +91,7 @@ public class UserController {
         }
         participates.add(post);
         user.setParticipates(participates);
-        userService.update(user);
+        hibernateUserService.update(user);
         return "redirect:/openPost/" + postId;
     }
 }

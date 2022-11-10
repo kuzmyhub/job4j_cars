@@ -1,26 +1,13 @@
 package ru.job4j.cars.servise;
 
-import lombok.AllArgsConstructor;
-import net.jcip.annotations.ThreadSafe;
-import org.springframework.stereotype.Service;
 import ru.job4j.cars.model.Driver;
 import ru.job4j.cars.model.User;
-import ru.job4j.cars.repostory.DriverRepository;
 
 import java.util.Optional;
 
-@ThreadSafe
-@Service
-@AllArgsConstructor
-public class DriverService {
+public interface DriverService {
 
-    private DriverRepository store;
+    public Driver add(Driver driver);
 
-    public Driver add(Driver driver) {
-        return store.add(driver);
-    }
-
-    public Optional<Driver> findByUser(User user) {
-        return store.findByUser(user);
-    }
+    public Optional<Driver> findByUser(User user);
 }

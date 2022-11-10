@@ -34,7 +34,8 @@
 
     <div class="container pt-3" style="text-align: center;">
         <div class="card-body">
-            <form th:action="@{/carShop?filter=brand}" method="post">
+            <form th:action="@{/carShop}">
+                <input type="hidden" name="filter" th:value="brand">
                 <div class="form-group">
                     <label><b>Название бренда</b></label>
                     <input type="text" class="form-control" name="brand" id="brand">

@@ -36,7 +36,7 @@
         <div class="card-body">
             <form th:action="@{/registration}" th:object="${registrationUser}" method="post">
                 <div class="form-group">
-                    <label><b>Имя пользователя</b></label>
+                    <label><b>Логин</b></label>
                     <input type="text" class="form-control" th:field="*{login}">
                     <label><b>Пароль</b></label>
                     <input type="text" class="form-control" th:field="*{password}">

@@ -27,11 +27,11 @@ import java.util.Set;
 @AllArgsConstructor
 public class PostController {
 
-    private PostService postService;
-    private CarService carService;
-    private EngineService engineService;
-    private PriceHistoryService priceHistoryService;
-    private DriverService driverService;
+    private HibernatePostService hibernatePostService;
+    private HibernateCarService hibernateCarService;
+    private HibernateEngineService hibernateEngineService;
+    private HibernatePriceHistoryService hibernatePriceHistoryService;
+    private HibernateDriverService hibernateDriverService;
 
     @GetMapping("/carShop")
     public String getPosts(Model model,
@@ -39,15 +39,17 @@ public class PostController {
                            String filter,
                            @RequestParam(name = "brand", required = false)
                                String brand, HttpSession httpSession) {
+        System.out.println(filter + "popo");
+        System.out.println(brand + "popo");
         List<Post> posts = null;
         if (filter == null) {
-            posts = postService.findAll();
+            posts = hibernatePostService.findAll();
         } else if (filter.equals("day")) {
-            posts = postService.findByLastDay();
+            posts = hibernatePostService.findByLastDay();
         } else if (filter.equals("photo")) {
-            posts = postService.findByAvailabilityPhoto();
+            posts = hibernatePostService.findByAvailabilityPhoto();
         } else if (filter.equals("brand")) {
-            posts = postService.findByBrand(brand);
+            posts = hibernatePostService.findByBrand(brand);
         }
         User user = SessionUser.getSession(httpSession);
         model.addAttribute("user", user);
@@ -65,7 +67,7 @@ public class PostController {
     @GetMapping("/openPost/{id}")
     public String openPost(Model model, HttpSession httpSession,
                            @PathVariable(name = "id") int id) {
-        Optional<Post> optionalPost = postService.findById(id);
+        Optional<Post> optionalPost = hibernatePostService.findById(id);
         if (optionalPost.isEmpty()) {
             return "404";
         }
@@ -77,7 +79,7 @@ public class PostController {
         model.addAttribute("post", post);
         model.addAttribute("priceHistories", priceHistories);
         model.addAttribute("price", lastChange.getAfter());
-        Optional<Car> optionalCar = carService.findById(post.getCar().getId());
+        Optional<Car> optionalCar = hibernateCarService.findById(post.getCar().getId());
         if (optionalCar.isEmpty()) {
             return "404";
         }
@@ -95,7 +97,7 @@ public class PostController {
         Post post = new Post();
         User user = SessionUser.getSession(httpSession);
         model.addAttribute("post", post);
-        model.addAttribute("engines", engineService.findAll());
+        model.addAttribute("engines", hibernateEngineService.findAll());
         model.addAttribute("user", user);
         return "post/addPost";
     }
@@ -108,18 +110,18 @@ public class PostController {
                              @RequestParam (name = "file")
                                      MultipartFile file) throws IOException {
         User user = SessionUser.getSession(httpSession);
-        Optional<Engine> engine = engineService.findById(engineId);
+        Optional<Engine> engine = hibernateEngineService.findById(engineId);
         if (engine.isEmpty()) {
             return "redirect:/formAddPost";
         }
         post.getCar().setEngine(engine.get());
-        Optional<Driver> optionalDriver = driverService.findByUser(user);
+        Optional<Driver> optionalDriver = hibernateDriverService.findByUser(user);
         Driver driver;
         if (optionalDriver.isEmpty()) {
             driver = new Driver();
             driver.setName(driverName);
             driver.setUser(user);
-            driverService.add(driver);
+            hibernateDriverService.add(driver);
         } else {
             driver = optionalDriver.get();
         }
@@ -127,20 +129,20 @@ public class PostController {
         PriceHistory priceHistory = new PriceHistory();
         priceHistory.setBefore(0);
         priceHistory.setAfter(price);
-        priceHistoryService.add(priceHistory);
+        hibernatePriceHistoryService.add(priceHistory);
         post.setPhoto(file.getBytes());
         post.setPriceHistories(List.of(priceHistory));
         post.setUser(user);
         post.setHead(post.getCar().getBrand() + " " + post.getCar().getModel());
-        carService.add(post.getCar());
-        postService.add(post);
+        hibernateCarService.add(post.getCar());
+        hibernatePostService.add(post);
         return "redirect:/openPost/" + post.getId();
     }
 
     @GetMapping("/formEditDescription")
     public String formEdit(Model model, HttpSession httpSession,
                            @ModelAttribute(name = "postId") int postId) {
-        Optional<Post> optionalPost = postService.findById(postId);
+        Optional<Post> optionalPost = hibernatePostService.findById(postId);
         if (optionalPost.isEmpty()) {
             return "404";
         }
@@ -153,24 +155,24 @@ public class PostController {
     @PostMapping("/editDescription")
     public String edit(@ModelAttribute(name = "postId") int postId,
                        @ModelAttribute(name = "description") String description) {
-        postService.updateDescription(postId, description);
+        hibernatePostService.updateDescription(postId, description);
         return "redirect:/openPost/" + postId;
     }
 
     @GetMapping("/changeStatus")
     public String changeStatus(@ModelAttribute(name = "postId") int postId) {
-        Optional<Post> optionalPost = postService.findById(postId);
+        Optional<Post> optionalPost = hibernatePostService.findById(postId);
         if (optionalPost.isEmpty()) {
             return "redirect:/404";
         }
-        postService.changeStatus(postId, !optionalPost.get().isSold());
+        hibernatePostService.changeStatus(postId, !optionalPost.get().isSold());
         return "redirect:/openPost/" + postId;
     }
 
     @GetMapping("/formEditPriceHistory")
     public String formEditPrice(Model model, HttpSession httpSession,
                                 @ModelAttribute(name = "postId") int postId) {
-        Optional<Post> optionalPost = postService.findById(postId);
+        Optional<Post> optionalPost = hibernatePostService.findById(postId);
         if (optionalPost.isEmpty()) {
             return "404";
         }
@@ -186,7 +188,7 @@ public class PostController {
     @PostMapping("/editPriceHistory")
     public String edit(@ModelAttribute(name = "postId") int postId,
                        @ModelAttribute(name = "price") int price) {
-        Optional<Post> optionalPost = postService.findById(postId);
+        Optional<Post> optionalPost = hibernatePostService.findById(postId);
         if (optionalPost.isEmpty()) {
             return "404";
         }
@@ -198,13 +200,13 @@ public class PostController {
         priceHistories.add(priceHistory);
         Post post = optionalPost.get();
         post.setPriceHistories(priceHistories);
-        postService.update(post);
+        hibernatePostService.update(post);
         return "redirect:/openPost/" + postId;
     }
 
     @GetMapping("/carPhoto/{postId}")
     public ResponseEntity<Resource> download(@PathVariable("postId") Integer postId) {
-        Optional<Post> optionalPost = postService.findById(postId);
+        Optional<Post> optionalPost = hibernatePostService.findById(postId);
         Post post = optionalPost.get();
         return ResponseEntity.ok()
                 .headers(new HttpHeaders())

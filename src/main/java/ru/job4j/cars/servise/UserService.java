@@ -1,37 +1,18 @@
 package ru.job4j.cars.servise;
 
-import lombok.AllArgsConstructor;
-import net.jcip.annotations.ThreadSafe;
-import org.springframework.stereotype.Service;
 import ru.job4j.cars.model.User;
-import ru.job4j.cars.repostory.UserRepository;
 
 import java.util.Optional;
 
-@ThreadSafe
-@Service
-@AllArgsConstructor
-public class UserService {
+public interface UserService {
 
-    private final UserRepository store;
+     User add(User user);
 
-    public User add(User user) {
-        return store.add(user);
-    }
+     Optional<User> findById(int id);
 
-    public Optional<User> findById(int id) {
-        return store.findById(id);
-    }
+     Optional<User> findByLoginAndPassword(User user);
 
-    public Optional<User> findByLoginAndPassword(User user) {
-        return store.findByLoginAndPassword(user);
-    }
+     void update(User user);
 
-    public void update(User user) {
-        store.update(user);
-    }
-
-    public Optional<User> findParticipatesByUser(int id) {
-        return store.findParticipatesByUser(id);
-    }
+     Optional<User> findParticipatesByUser(int id);
 }

@@ -127,10 +127,13 @@
         <table class="table_center" width="770px">
             <tbody>
             <tr>
-                <td align="left" width="425px">
+                <td align="left" width="400px">
                     <p><b>Описание</b></p>
                 </td>
-                <td align="left" width="130px">
+                <td width="10px">
+
+                </td>
+                <td align="left" width="140px">
                     <p><b>Статус</b></p>
                 </td>
                 <td align="left">
@@ -146,6 +149,9 @@
                 <td align="left">
                     <p th:text="${post.description}"></p>
                 </td>
+                <td width="10px">
+
+                </td>
                 <td align="left">
                     <p th:if="${post.sold == false}">Не продано</p>
                     <p th:if="${post.sold != false}">Продано</p>
@@ -156,6 +162,9 @@
                     <form th:action="@{/formEditDescription}">
                         <button type="submit" name="postId" th:value="${post.id}" class="btn btn-primary mt-3">Редактировать</button>
                     </form>
+                </td>
+                <td width="10px">
+
                 </td>
                 <td align="left" th:if="${post.user.id == user.id}">
                     <form th:action="@{/changeStatus}">
