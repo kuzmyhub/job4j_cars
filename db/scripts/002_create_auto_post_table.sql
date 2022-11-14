@@ -1,6 +1,0 @@
-CREATE TABLE IF NOT EXISTS auto_post(
-  id SERIAL PRIMARY KEY,
-  text VARCHAR NOT NULL,
-  created TIMESTAMP NOT NULL,
-  user_id INT NOT NULL REFERENCES auto_user(id)
-);

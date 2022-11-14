@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.job4j.cars.model.Post;
 import ru.job4j.cars.model.User;
-import ru.job4j.cars.servise.HibernatePostService;
-import ru.job4j.cars.servise.HibernateUserService;
+import ru.job4j.cars.service.HibernatePostService;
+import ru.job4j.cars.service.HibernateUserService;
 import ru.job4j.cars.util.SessionUser;
 
 import javax.servlet.http.HttpServletRequest;
