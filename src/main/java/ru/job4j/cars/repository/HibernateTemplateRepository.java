@@ -13,7 +13,7 @@ import java.util.function.Function;
 
 @Component
 @AllArgsConstructor
-public class CrudRepository implements Crud {
+public class HibernateTemplateRepository implements TemplateRepository {
 
     private final SessionFactory sessionFactory;
 

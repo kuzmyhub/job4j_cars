@@ -15,7 +15,7 @@ public class HibernateCarService implements CarService {
 
     private HibernateCarRepository store;
 
-    public Car add(Car car) {
+    public Optional<Car> add(Car car) {
         return store.add(car);
     }
 

@@ -15,7 +15,7 @@ public class HibernateUserService implements UserService {
 
     private final HibernateUserRepository store;
 
-    public User add(User user) {
+    public Optional<User> add(User user) {
         return store.add(user);
     }
 

@@ -16,7 +16,7 @@ public class HibernateDriverService implements DriverService {
 
     private HibernateDriverRepository store;
 
-    public Driver add(Driver driver) {
+    public Optional<Driver> add(Driver driver) {
         return store.add(driver);
     }
 

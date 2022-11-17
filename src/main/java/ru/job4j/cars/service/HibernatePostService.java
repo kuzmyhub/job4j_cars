@@ -16,7 +16,7 @@ public class HibernatePostService implements PostService {
 
     private HibernatePostRepository store;
 
-    public Post add(Post post) {
+    public Optional<Post> add(Post post) {
         return store.add(post);
     }
 

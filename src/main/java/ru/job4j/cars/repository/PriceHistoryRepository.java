@@ -2,7 +2,9 @@ package ru.job4j.cars.repository;
 
 import ru.job4j.cars.model.PriceHistory;
 
+import java.util.Optional;
+
 public interface PriceHistoryRepository {
 
-    PriceHistory add(PriceHistory priceHistory);
+    Optional<PriceHistory> add(PriceHistory priceHistory);
 }

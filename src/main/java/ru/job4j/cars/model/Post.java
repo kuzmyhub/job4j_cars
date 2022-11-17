@@ -1,17 +1,23 @@
 package ru.job4j.cars.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
 @Entity
 @Table(name = "auto_post")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Getter
+@Setter
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private int id;
     private String head;
     private String description;

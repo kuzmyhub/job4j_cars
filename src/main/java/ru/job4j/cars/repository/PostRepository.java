@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface PostRepository {
 
-     Post add(Post post);
+     Optional<Post> add(Post post);
 
      List<Post> findAll();
 

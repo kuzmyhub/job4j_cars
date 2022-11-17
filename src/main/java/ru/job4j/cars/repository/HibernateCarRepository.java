@@ -18,15 +18,21 @@ public class HibernateCarRepository implements CarRepository {
 
     private static final String BY_ID = "WHERE c.id = :fId";
 
-    private CrudRepository crudRepository;
+    private TemplateRepository hibernateTemplateRepository;
 
-    public Car add(Car car) {
-        crudRepository.run(session -> session.save(car));
-        return car;
+    public Optional<Car> add(Car car) {
+        Optional<Car> addingCar;
+        try {
+            hibernateTemplateRepository.run(session -> session.save(car));
+            addingCar = Optional.of(car);
+        } catch (Exception e) {
+            addingCar = Optional.empty();
+        }
+        return addingCar;
     }
 
     public Optional<Car> findById(int id) {
-        return crudRepository.optional(
+        return hibernateTemplateRepository.optional(
                 String.format("%s %s", SELECT, BY_ID),
                 Car.class,
                 Map.of("fId", id)
@@ -34,7 +40,7 @@ public class HibernateCarRepository implements CarRepository {
     }
 
     public Car update(Car car) {
-        crudRepository.run(session -> session.update(car));
+        hibernateTemplateRepository.run(session -> session.update(car));
         return car;
     }
 }

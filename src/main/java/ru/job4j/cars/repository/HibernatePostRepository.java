@@ -15,7 +15,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class HibernatePostRepository implements PostRepository {
 
-    private CrudRepository crudRepository;
+    private TemplateRepository hibernateTemplateRepository;
 
     private static final String SELECT = "SELECT DISTINCT p FROM Post p"
             + " JOIN FETCH p.user"
@@ -40,20 +40,26 @@ public class HibernatePostRepository implements PostRepository {
 
     private static final String SOLD = "p.sold = :fSold WHERE p.id = :fId";
 
-    public Post add(Post post) {
-        crudRepository.run(session -> session.save(post));
-        return post;
+    public Optional<Post> add(Post post) {
+        Optional<Post> addingPost;
+        try {
+            hibernateTemplateRepository.run(session -> session.save(post));
+            addingPost = Optional.of(post);
+        } catch (Exception e) {
+            addingPost = Optional.empty();
+        }
+        return addingPost;
     }
 
     public List<Post> findAll() {
-        return crudRepository.query(
+        return hibernateTemplateRepository.query(
                 SELECT,
                 Post.class
         );
     }
 
     public Optional<Post> findById(int id) {
-        return crudRepository.optional(
+        return hibernateTemplateRepository.optional(
                 String.format("%s %s", SELECT, BY_ID),
                 Post.class,
                 Map.of("fId", id)
@@ -61,7 +67,7 @@ public class HibernatePostRepository implements PostRepository {
     }
 
     public List<Post> findByLastDay() {
-        return crudRepository.query(
+        return hibernateTemplateRepository.query(
                 String.format("%s %s", SELECT, BY_LAST_DAY),
                 Post.class,
                 Map.of("fCreated", LocalDateTime.now().minusDays(1))
@@ -69,14 +75,14 @@ public class HibernatePostRepository implements PostRepository {
     }
 
     public List<Post> findByAvailabilityPhoto() {
-        return crudRepository.query(
+        return hibernateTemplateRepository.query(
                 String.format("%s %s", SELECT, BY_AVAILABILITY_PHOTO),
                 Post.class
                 );
     }
 
     public List<Post> findByBrand(String brand) {
-        return crudRepository.query(
+        return hibernateTemplateRepository.query(
                 String.format("%s %s", SELECT, BY_BRAND),
                 Post.class,
                 Map.of("fBrand", brand)
@@ -84,20 +90,20 @@ public class HibernatePostRepository implements PostRepository {
     }
 
     public void updateDescription(int id, String description) {
-        crudRepository.run(
+        hibernateTemplateRepository.run(
                 String.format("%s %s", UPDATE, DESCRIPTION),
                 Map.of("fDescription", description, "fId", id
                 ));
     }
 
     public void changeStatus(int id, boolean sold) {
-        crudRepository.run(
+        hibernateTemplateRepository.run(
                 String.format("%s %s", UPDATE, SOLD),
                 Map.of("fSold", sold, "fId", id
                 ));
     }
 
     public void update(Post post) {
-        crudRepository.run(session -> session.update(post));
+        hibernateTemplateRepository.run(session -> session.update(post));
     }
 }

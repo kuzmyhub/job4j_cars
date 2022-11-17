@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface DriverService {
 
-    public Driver add(Driver driver);
+    Optional<Driver> add(Driver driver);
 
-    public Optional<Driver> findByUser(User user);
+    Optional<Driver> findByUser(User user);
 }

@@ -14,21 +14,21 @@ import java.util.Optional;
 @AllArgsConstructor
 public class HibernateEngineRepository implements EngineRepository {
 
-    private CrudRepository crudRepository;
+    private TemplateRepository hibernateTemplateRepository;
 
     private static final String SELECT = "FROM Engine e";
 
     private static final String BY_ID = "WHERE e.id = :fId";
 
     public List<Engine> findAll() {
-        return crudRepository.query(
+        return hibernateTemplateRepository.query(
                 SELECT,
                 Engine.class
         );
     }
 
     public Optional<Engine> findById(int id) {
-        return crudRepository.optional(
+        return hibernateTemplateRepository.optional(
                 String.format("%s %s", SELECT, BY_ID),
                 Engine.class,
                 Map.of("fId", id));

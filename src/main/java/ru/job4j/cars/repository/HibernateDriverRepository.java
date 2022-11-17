@@ -14,20 +14,26 @@ import java.util.Optional;
 @AllArgsConstructor
 public class HibernateDriverRepository implements DriverRepository {
 
-    private CrudRepository crudRepository;
+    private TemplateRepository hibernateTemplateRepository;
 
     private static final String SELECT = "FROM Driver d"
             + " JOIN FETCH d.user";
 
     private static final String BY_USER = "WHERE d.user = :fUser";
 
-    public Driver add(Driver driver) {
-        crudRepository.run(session -> session.save(driver));
-        return driver;
+    public Optional<Driver> add(Driver driver) {
+        Optional<Driver> addingDriver;
+        try {
+            addingDriver = Optional.of(driver);
+            hibernateTemplateRepository.run(session -> session.save(driver));
+        } catch (Exception e) {
+            addingDriver = Optional.empty();
+        }
+        return addingDriver;
     }
 
     public Optional<Driver> findByUser(User user) {
-        return crudRepository.optional(
+        return hibernateTemplateRepository.optional(
                 String.format("%s %s", SELECT, BY_USER),
                 Driver.class,
                 Map.of("fUser", user)

@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public interface CarService {
 
-     Car add(Car car);
+     Optional<Car> add(Car car);
 
      Optional<Car> findById(int id);
 
