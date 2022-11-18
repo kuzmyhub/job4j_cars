@@ -5,22 +5,22 @@ import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Service;
 import ru.job4j.cars.model.Driver;
 import ru.job4j.cars.model.User;
-import ru.job4j.cars.repository.HibernateDriverRepository;
+import ru.job4j.cars.repository.DriverRepository;
 
 import java.util.Optional;
 
 @ThreadSafe
 @Service
 @AllArgsConstructor
-public class HibernateDriverService implements DriverService {
+public class SimpleDriverService implements DriverService {
 
-    private HibernateDriverRepository store;
+    private DriverRepository hibernateDriverRepository;
 
     public Optional<Driver> add(Driver driver) {
-        return store.add(driver);
+        return hibernateDriverRepository.add(driver);
     }
 
     public Optional<Driver> findByUser(User user) {
-        return store.findByUser(user);
+        return hibernateDriverRepository.findByUser(user);
     }
 }

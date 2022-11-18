@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.job4j.cars.model.Post;
 import ru.job4j.cars.model.User;
-import ru.job4j.cars.service.HibernatePostService;
-import ru.job4j.cars.service.HibernateUserService;
+import ru.job4j.cars.service.PostService;
+import ru.job4j.cars.service.UserService;
 import ru.job4j.cars.util.SessionUser;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,8 +24,8 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserController {
 
-    private final HibernateUserService hibernateUserService;
-    private final HibernatePostService hibernatePostService;
+    private final UserService hibernateUserService;
+    private final PostService simplePostService;
 
     @GetMapping("/formRegistration")
     public String formRegistrationUser(Model model, HttpSession httpSession) {
@@ -70,7 +70,7 @@ public class UserController {
     public String subscribe(@ModelAttribute(name = "postId") int postId,
                             HttpSession httpSession) {
         User user = SessionUser.getSession(httpSession);
-        Optional<Post> optionalPost = hibernatePostService.findById(postId);
+        Optional<Post> optionalPost = simplePostService.findById(postId);
         if (optionalPost.isEmpty()) {
             return "404";
         }
