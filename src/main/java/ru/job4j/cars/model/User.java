@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.List;
@@ -26,6 +28,7 @@ public class User {
             joinColumns = { @JoinColumn (name = "user_id") },
             inverseJoinColumns = { @JoinColumn (name = "post_id") }
     )
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Post> participates;
 
     public User() {
