@@ -24,7 +24,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserController {
 
-    private final UserService hibernateUserService;
+    private final UserService simpleUserService;
     private final PostService simplePostService;
 
     @GetMapping("/formRegistration")
@@ -37,7 +37,7 @@ public class UserController {
 
     @PostMapping("/registration")
     public String registration(@ModelAttribute User registrationUser) {
-        hibernateUserService.add(registrationUser);
+        simpleUserService.add(registrationUser);
         return "redirect:/carShop";
     }
 
@@ -51,7 +51,7 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(@ModelAttribute User user, HttpServletRequest httpServletRequest) {
-        Optional<User> optionalUser = hibernateUserService.findByLoginAndPassword(user);
+        Optional<User> optionalUser = simpleUserService.findByLoginAndPassword(user);
         if (optionalUser.isEmpty()) {
             return "redirect:/formLogin";
         }
@@ -76,7 +76,7 @@ public class UserController {
         }
         Post post = optionalPost.get();
         Optional<User> optionalUserWithParticipates
-                = hibernateUserService.findParticipatesByUser(user.getId());
+                = simpleUserService.findParticipatesByUser(user.getId());
         if (optionalUserWithParticipates.isEmpty()) {
             user.setParticipates(new ArrayList<>());
             optionalUserWithParticipates = Optional.of(user);
@@ -91,7 +91,7 @@ public class UserController {
         }
         participates.add(post);
         user.setParticipates(participates);
-        hibernateUserService.update(user);
+        simpleUserService.update(user);
         return "redirect:/openPost/" + postId;
     }
 }
