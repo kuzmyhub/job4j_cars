@@ -39,8 +39,6 @@ public class PostController {
                            String filter,
                            @RequestParam(name = "brand", required = false)
                                String brand, HttpSession httpSession) {
-        System.out.println(filter + "popo");
-        System.out.println(brand + "popo");
         List<Post> posts = null;
         if (filter == null) {
             posts = simplePostService.findAll();
@@ -84,9 +82,6 @@ public class PostController {
             return "404";
         }
         Set<Driver> owners = optionalCar.get().getOwners();
-        for (Driver d : owners) {
-            System.out.println(d.getName());
-        }
         model.addAttribute("owners", owners);
         model.addAttribute("user", user);
         return "post/post";
