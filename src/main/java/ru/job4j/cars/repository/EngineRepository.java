@@ -7,6 +7,8 @@ import java.util.Optional;
 
 public interface EngineRepository {
 
+    Optional<Engine> add(Engine engine);
+
     List<Engine> findAll();
 
     Optional<Engine> findById(int id);

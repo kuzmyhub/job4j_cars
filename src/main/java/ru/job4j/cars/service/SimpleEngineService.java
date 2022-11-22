@@ -16,6 +16,10 @@ public class SimpleEngineService implements EngineService {
 
     private EngineRepository hibernateEngineRepository;
 
+    public Optional<Engine> add(Engine engine) {
+        return hibernateEngineRepository.add(engine);
+    }
+
     public List<Engine> findAll() {
         return hibernateEngineRepository.findAll();
     }

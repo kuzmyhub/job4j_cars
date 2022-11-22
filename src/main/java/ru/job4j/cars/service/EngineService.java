@@ -7,7 +7,9 @@ import java.util.Optional;
 
 public interface EngineService {
 
-    public List<Engine> findAll();
+    Optional<Engine> add(Engine engine);
 
-    public Optional<Engine> findById(int id);
+    List<Engine> findAll();
+
+    Optional<Engine> findById(int id);
 }
