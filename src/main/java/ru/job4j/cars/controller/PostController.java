@@ -135,7 +135,7 @@ public class PostController {
     }
 
     @GetMapping("/formEditDescription")
-    public String formEdit(Model model, HttpSession httpSession,
+    public String formEditDescription(Model model, HttpSession httpSession,
                            @ModelAttribute(name = "postId") int postId) {
         Optional<Post> optionalPost = simplePostService.findById(postId);
         if (optionalPost.isEmpty()) {
@@ -148,7 +148,7 @@ public class PostController {
     }
 
     @PostMapping("/editDescription")
-    public String edit(@ModelAttribute(name = "postId") int postId,
+    public String editDescription(@ModelAttribute(name = "postId") int postId,
                        @ModelAttribute(name = "description") String description) {
         simplePostService.updateDescription(postId, description);
         return "redirect:/openPost/" + postId;
@@ -158,7 +158,7 @@ public class PostController {
     public String changeStatus(@ModelAttribute(name = "postId") int postId) {
         Optional<Post> optionalPost = simplePostService.findById(postId);
         if (optionalPost.isEmpty()) {
-            return "redirect:/404";
+            return "404";
         }
         simplePostService.changeStatus(postId, !optionalPost.get().isSold());
         return "redirect:/openPost/" + postId;
@@ -181,7 +181,7 @@ public class PostController {
     }
 
     @PostMapping("/editPriceHistory")
-    public String edit(@ModelAttribute(name = "postId") int postId,
+    public String editPrice(@ModelAttribute(name = "postId") int postId,
                        @ModelAttribute(name = "price") int price) {
         Optional<Post> optionalPost = simplePostService.findById(postId);
         if (optionalPost.isEmpty()) {

@@ -253,40 +253,6 @@ class PostControllerTest {
     }
 
     @Test
-    public void whenCreatePostThenNotSuccess() throws IOException {
-        PostService simplePostService =
-                mock(SimplePostService.class);
-        CarService simpleCarService =
-                mock(SimpleCarService.class);
-        EngineService simpleEngineService =
-                mock(SimpleEngineService.class);
-        PriceHistoryService simplePriceHistoryService =
-                mock(SimplePriceHistoryService.class);
-        DriverService simpleDriverService =
-                mock(SimpleDriverService.class);
-        PostController postController = new PostController(
-                simplePostService,
-                simpleCarService,
-                simpleEngineService,
-                simplePriceHistoryService,
-                simpleDriverService
-        );
-        HttpSession httpSession = mock(HttpSession.class);
-        MultipartFile file = mock(MultipartFile.class);
-        int engineId = 1;
-        int price = 1;
-        String driverName = "driver";
-        Post post = new Post();
-        Optional<Engine> optionalEngine = Optional.empty();
-        when(simpleEngineService.findById(engineId)).thenReturn(optionalEngine);
-        String expected = "redirect:/formAddPost";
-        String page = postController.createPost(
-                post, httpSession, engineId, price, driverName, file
-        );
-        assertThat(page).isEqualTo(expected);
-    }
-
-    @Test
     public void whenCreatePostThenSuccess() throws IOException {
         PostService simplePostService =
                 mock(SimplePostService.class);
@@ -330,6 +296,334 @@ class PostControllerTest {
         String page = postController.createPost(
                 post, httpSession, engineId, price, driverName, file
         );
+        assertThat(page).isEqualTo(expected);
+    }
+
+    @Test
+    public void whenCreatePostThenNotSuccess() throws IOException {
+        PostService simplePostService =
+                mock(SimplePostService.class);
+        CarService simpleCarService =
+                mock(SimpleCarService.class);
+        EngineService simpleEngineService =
+                mock(SimpleEngineService.class);
+        PriceHistoryService simplePriceHistoryService =
+                mock(SimplePriceHistoryService.class);
+        DriverService simpleDriverService =
+                mock(SimpleDriverService.class);
+        PostController postController = new PostController(
+                simplePostService,
+                simpleCarService,
+                simpleEngineService,
+                simplePriceHistoryService,
+                simpleDriverService
+        );
+        HttpSession httpSession = mock(HttpSession.class);
+        MultipartFile file = mock(MultipartFile.class);
+        int engineId = 1;
+        int price = 1;
+        String driverName = "driver";
+        Post post = new Post();
+        Optional<Engine> optionalEngine = Optional.empty();
+        when(simpleEngineService.findById(engineId)).thenReturn(optionalEngine);
+        String expected = "redirect:/formAddPost";
+        String page = postController.createPost(
+                post, httpSession, engineId, price, driverName, file
+        );
+        assertThat(page).isEqualTo(expected);
+    }
+
+    @Test
+    public void whenFormEditDescriptionThenSuccess() {
+        PostService simplePostService =
+                mock(SimplePostService.class);
+        CarService simpleCarService =
+                mock(SimpleCarService.class);
+        EngineService simpleEngineService =
+                mock(SimpleEngineService.class);
+        PriceHistoryService simplePriceHistoryService =
+                mock(SimplePriceHistoryService.class);
+        DriverService simpleDriverService =
+                mock(SimpleDriverService.class);
+        PostController postController = new PostController(
+                simplePostService,
+                simpleCarService,
+                simpleEngineService,
+                simplePriceHistoryService,
+                simpleDriverService
+        );
+        HttpSession httpSession = mock(HttpSession.class);
+        Model model = mock(Model.class);
+        int postId = 1;
+        User user = new User();
+        user.setLogin("Гость");
+        Post post = new Post();
+        post.setDescription("Продам авто");
+        Optional<Post> optionalPost = Optional.of(post);
+        when(simplePostService.findById(postId)).thenReturn(optionalPost);
+        String expected = "post/editDescription";
+        String page = postController.formEditDescription(
+                model, httpSession, postId
+        );
+        verify(model).addAttribute("post", optionalPost.get());
+        verify(model).addAttribute("user", user);
+        assertThat(page).isEqualTo(expected);
+    }
+
+    @Test
+    public void whenFormEditDescriptionNotSuccess() {
+        PostService simplePostService =
+                mock(SimplePostService.class);
+        CarService simpleCarService =
+                mock(SimpleCarService.class);
+        EngineService simpleEngineService =
+                mock(SimpleEngineService.class);
+        PriceHistoryService simplePriceHistoryService =
+                mock(SimplePriceHistoryService.class);
+        DriverService simpleDriverService =
+                mock(SimpleDriverService.class);
+        PostController postController = new PostController(
+                simplePostService,
+                simpleCarService,
+                simpleEngineService,
+                simplePriceHistoryService,
+                simpleDriverService
+        );
+        HttpSession httpSession = mock(HttpSession.class);
+        Model model = mock(Model.class);
+        int postId = 1;
+        Optional<Post> optionalPost = Optional.empty();
+        when(simplePostService.findById(postId)).thenReturn(optionalPost);
+        String expected = "404";
+        String page = postController.formEditDescription(
+                model, httpSession, postId
+        );
+        assertThat(page).isEqualTo(expected);
+    }
+
+    @Test
+    public void whenEditEditDescription() {
+        PostService simplePostService =
+                mock(SimplePostService.class);
+        CarService simpleCarService =
+                mock(SimpleCarService.class);
+        EngineService simpleEngineService =
+                mock(SimpleEngineService.class);
+        PriceHistoryService simplePriceHistoryService =
+                mock(SimplePriceHistoryService.class);
+        DriverService simpleDriverService =
+                mock(SimpleDriverService.class);
+        PostController postController = new PostController(
+                simplePostService,
+                simpleCarService,
+                simpleEngineService,
+                simplePriceHistoryService,
+                simpleDriverService
+        );
+        int postId = 1;
+        String description = "Не продам авто";
+        String expected = "redirect:/openPost/" + postId;
+        String page = postController.editDescription(
+                postId, description
+        );
+        assertThat(page).isEqualTo(expected);
+    }
+
+    @Test
+    public void whenChangeStatusThenSuccess() {
+        PostService simplePostService =
+                mock(SimplePostService.class);
+        CarService simpleCarService =
+                mock(SimpleCarService.class);
+        EngineService simpleEngineService =
+                mock(SimpleEngineService.class);
+        PriceHistoryService simplePriceHistoryService =
+                mock(SimplePriceHistoryService.class);
+        DriverService simpleDriverService =
+                mock(SimpleDriverService.class);
+        PostController postController = new PostController(
+                simplePostService,
+                simpleCarService,
+                simpleEngineService,
+                simplePriceHistoryService,
+                simpleDriverService
+        );
+        int postId = 1;
+        Post post = new Post();
+        post.setDescription("Продам авто");
+        Optional<Post> optionalPost = Optional.of(post);
+        when(simplePostService.findById(postId)).thenReturn(optionalPost);
+        String expected = "redirect:/openPost/" + postId;
+        String page = postController.changeStatus(postId);
+        assertThat(page).isEqualTo(expected);
+    }
+
+    @Test
+    public void whenChangeStatusThenNotSuccess() {
+        PostService simplePostService =
+                mock(SimplePostService.class);
+        CarService simpleCarService =
+                mock(SimpleCarService.class);
+        EngineService simpleEngineService =
+                mock(SimpleEngineService.class);
+        PriceHistoryService simplePriceHistoryService =
+                mock(SimplePriceHistoryService.class);
+        DriverService simpleDriverService =
+                mock(SimpleDriverService.class);
+        PostController postController = new PostController(
+                simplePostService,
+                simpleCarService,
+                simpleEngineService,
+                simplePriceHistoryService,
+                simpleDriverService
+        );
+        int postId = 1;
+        Optional<Post> optionalPost = Optional.empty();
+        when(simplePostService.findById(postId)).thenReturn(optionalPost);
+        String expected = "404";
+        String page = postController.changeStatus(postId);
+        assertThat(page).isEqualTo(expected);
+    }
+
+    @Test
+    public void whenFormEditPriceThanSuccess() {
+        PostService simplePostService =
+                mock(SimplePostService.class);
+        CarService simpleCarService =
+                mock(SimpleCarService.class);
+        EngineService simpleEngineService =
+                mock(SimpleEngineService.class);
+        PriceHistoryService simplePriceHistoryService =
+                mock(SimplePriceHistoryService.class);
+        DriverService simpleDriverService =
+                mock(SimpleDriverService.class);
+        PostController postController = new PostController(
+                simplePostService,
+                simpleCarService,
+                simpleEngineService,
+                simplePriceHistoryService,
+                simpleDriverService
+        );
+        HttpSession httpSession = mock(HttpSession.class);
+        Model model = mock(Model.class);
+        int postId = 1;
+        User user = new User();
+        user.setLogin("Гость");
+        PriceHistory priceHistory = new PriceHistory();
+        priceHistory.setBefore(50000);
+        priceHistory.setAfter(45000);
+        List<PriceHistory> priceHistories = new ArrayList<>();
+        priceHistories.add(priceHistory);
+        Post post = new Post();
+        post.setDescription("Продам авто");
+        post.setPriceHistories(priceHistories);
+        Optional<Post> optionalPost = Optional.of(post);
+        when(simplePostService.findById(postId)).thenReturn(optionalPost);
+        String expected = "post/editPriceHistory";
+        String page = postController.formEditPrice(
+                model, httpSession, postId
+        );
+        verify(model).addAttribute("post", optionalPost.get());
+        verify(model).addAttribute(
+                "price",
+                priceHistories.get(priceHistories.size() - 1).getAfter()
+        );
+        verify(model).addAttribute("user", user);
+        assertThat(page).isEqualTo(expected);
+    }
+
+    @Test
+    public void whenFormEditPriceThenNotSuccess() {
+        PostService simplePostService =
+                mock(SimplePostService.class);
+        CarService simpleCarService =
+                mock(SimpleCarService.class);
+        EngineService simpleEngineService =
+                mock(SimpleEngineService.class);
+        PriceHistoryService simplePriceHistoryService =
+                mock(SimplePriceHistoryService.class);
+        DriverService simpleDriverService =
+                mock(SimpleDriverService.class);
+        PostController postController = new PostController(
+                simplePostService,
+                simpleCarService,
+                simpleEngineService,
+                simplePriceHistoryService,
+                simpleDriverService
+        );
+        HttpSession httpSession = mock(HttpSession.class);
+        Model model = mock(Model.class);
+        int postId = 1;
+        Optional<Post> optionalPost = Optional.empty();
+        when(simplePostService.findById(postId)).thenReturn(optionalPost);
+        String expected = "404";
+        String page = postController.formEditPrice(
+                model, httpSession, postId
+        );
+        assertThat(page).isEqualTo(expected);
+    }
+
+    @Test
+    public void whenEditPriceThenSuccess() {
+        PostService simplePostService =
+                mock(SimplePostService.class);
+        CarService simpleCarService =
+                mock(SimpleCarService.class);
+        EngineService simpleEngineService =
+                mock(SimpleEngineService.class);
+        PriceHistoryService simplePriceHistoryService =
+                mock(SimplePriceHistoryService.class);
+        DriverService simpleDriverService =
+                mock(SimpleDriverService.class);
+        PostController postController = new PostController(
+                simplePostService,
+                simpleCarService,
+                simpleEngineService,
+                simplePriceHistoryService,
+                simpleDriverService
+        );
+        int postId = 1;
+        int price = 40000;
+        Optional<Post> optionalPost = Optional.empty();
+        when(simplePostService.findById(postId)).thenReturn(optionalPost);
+        String expected = "404";
+        String page = postController.editPrice(postId, price);
+        assertThat(page).isEqualTo(expected);
+    }
+
+    @Test
+    public void whenEditPriceThenNotSuccess() {
+        PostService simplePostService =
+                mock(SimplePostService.class);
+        CarService simpleCarService =
+                mock(SimpleCarService.class);
+        EngineService simpleEngineService =
+                mock(SimpleEngineService.class);
+        PriceHistoryService simplePriceHistoryService =
+                mock(SimplePriceHistoryService.class);
+        DriverService simpleDriverService =
+                mock(SimpleDriverService.class);
+        PostController postController = new PostController(
+                simplePostService,
+                simpleCarService,
+                simpleEngineService,
+                simplePriceHistoryService,
+                simpleDriverService
+        );
+        int postId = 1;
+        int price = 10000;
+        PriceHistory priceHistory = new PriceHistory();
+        priceHistory.setBefore(50000);
+        priceHistory.setAfter(45000);
+        List<PriceHistory> priceHistories = new ArrayList<>();
+        priceHistories.add(priceHistory);
+        Post post = new Post();
+        post.setDescription("Продам авто");
+        post.setPriceHistories(priceHistories);
+        Optional<Post> optionalPost = Optional.of(post);
+        when(simplePostService.findById(postId)).thenReturn(optionalPost);
+        String expected = "redirect:/openPost/" + postId;
+        String page = postController.editPrice(postId, price);
         assertThat(page).isEqualTo(expected);
     }
 }
